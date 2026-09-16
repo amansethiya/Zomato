@@ -21,9 +21,12 @@
   },
   "homepage": "https://github.com/amansethiya/Zomato#readme",
   "dependencies": {
+    "bcrypt": "^6.0.0",
     "config": "^5.0.1",
+    "cookie-parser": "^1.4.7",
     "dotenv": "^17.4.2",
     "express": "^5.2.1",
+    "jsonwebtoken": "^9.0.3",
     "mongoose": "^9.10.0"
   }
 }
