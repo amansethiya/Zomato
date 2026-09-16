@@ -1,6 +1,7 @@
 import userModel from "../models/user.model.js";
 import bcrypt from "bcrypt";
 import jwt from "jsonwebtoken";
+import foodpartnerModel from "../models/foodpartner.model.js";
 
 export async function registerController(req, res) {
   const { fullname, email, password } = req.body;
@@ -70,5 +71,36 @@ export async function logoutController(req, res) {
   res.clearCookie("token");
   res.status(200).json({
     message: "user Logged-Out Successfully",
+  });
+}
+
+export async function registerFoodPartnerController(req, res) {
+  const { foodpartnername, foodpartneremail, password } = req.body;
+  const isExists = await foodpartnerModel.findOne({
+    foodpartneremail,
+  });
+  if (isExists) {
+    return res.status(400).json({
+      message: "Food-Partner email already registered!",
+    });
+  }
+  const hashPassword = await bcrypt.hash(password, 10);
+  const foodPartner = await foodpartnerModel.create({
+    foodpartnername,
+    foodpartneremail,
+    password: hashPassword,
+  });
+  const foodPartnerToken = jwt.sign(
+    { id: foodPartner._id },
+    process.env.JWT_SECRET,
+  );
+  res.cookie("foodPartnerToken", foodPartnerToken);
+  res.status(201).json({
+    message: "Congretulation you are now Food Partner on Zomato",
+    foodPartner: {
+      foodpartnername,
+      foodpartneremail,
+    },
+    foodPartnerToken,
   });
 }
