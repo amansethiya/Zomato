@@ -104,3 +104,41 @@ export async function registerFoodPartnerController(req, res) {
     foodPartnerToken,
   });
 }
+
+export async function loginFoodPartnerController(req, res) {
+  const { foodpartneremail, password } = req.body;
+  const foodPartner = await foodpartnerModel.findOne({
+    foodpartneremail,
+  });
+  if (!foodPartner) {
+    return res.status(400).json({
+      message: "Food-Partner is not registered registered!",
+    });
+  }
+  const checkPassword = await bcrypt.compare(password, foodPartner.password);
+  if (!checkPassword) {
+    return res.status(400).json({
+      message: "Food-Partner password is wrong!",
+    });
+  }
+  const foodPartnerToken = jwt.sign(
+    { id: foodPartner._id },
+    process.env.JWT_SECRET,
+  );
+  res.cookie("foodPartnerToken", foodPartnerToken);
+  res.status(201).json({
+    message: "Congretulation you are now Food Partner on Zomato",
+    foodPartner: {
+      FoodPartnerName: foodPartner.foodpartnername,
+      FoodPartnerEmail: foodPartner.foodpartneremail,
+    },
+    foodPartnerToken,
+  });
+}
+
+export async function logoutFoodPartnerController(req, res) {
+  res.clearCookie("foodPartnerToken");
+  res.status(200).json({
+    message: "user Logged-Out Successfully",
+  });
+}
