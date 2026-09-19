@@ -6,6 +6,7 @@ import CreatorRegister from "../pages/auth/creatorRegister";
 import CreatorLogin from "../pages/auth/creatorLogin";
 import Home from "../pages/home";
 import Reels from "../pages/reels";
+import Feeds from "../pages/feeds";
 
 const appRouter = () => {
   return (
@@ -18,6 +19,7 @@ const appRouter = () => {
           <Route path="/creator/register" element={<CreatorRegister />} />
           <Route path="/creator/login" element={<CreatorLogin />} />
           <Route path="/reels" element={<Reels />} />
+          <Route path="/feeds" element={<Feeds />} />
         </Routes>
       </Router>
     </>
