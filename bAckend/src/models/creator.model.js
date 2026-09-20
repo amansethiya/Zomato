@@ -1,11 +1,12 @@
 import mongoose from "mongoose";
 
-const foodpartnerSchema = new mongoose.Schema({
-  foodpartnername: {
+const creatorSchema = new mongoose.Schema({
+  creatorusername: {
     type: String,
     required: true,
+    unique: true,
   },
-  foodpartneremail: {
+  creatoremail: {
     type: String,
     required: true,
     unique: true,
@@ -18,5 +19,5 @@ const foodpartnerSchema = new mongoose.Schema({
   },
 });
 
-const foodpartnerModel = mongoose.model("foodpartner", foodpartnerSchema);
-export default foodpartnerModel;
+const creatorModel = mongoose.model("creator", creatorSchema);
+export default creatorModel;

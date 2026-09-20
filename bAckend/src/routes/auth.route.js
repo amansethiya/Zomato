@@ -3,9 +3,9 @@ import {
   registerController,
   loginController,
   logoutController,
-  registerFoodPartnerController,
-  loginFoodPartnerController,
-  logoutFoodPartnerController,
+  registercreatorController,
+  logincreatorController,
+  logoutcreatorController,
 } from "../controller/auth.controller.js";
 
 const router = express.Router();
@@ -13,8 +13,8 @@ const router = express.Router();
 router.post("/user/register", registerController);
 router.post("/user/login", loginController);
 router.post("/user/logout", logoutController);
-router.post("/foodpartner/register", registerFoodPartnerController);
-router.post("/foodpartner/login", loginFoodPartnerController);
-router.post("/foodpartner/logout", logoutFoodPartnerController);
+router.post("/creator/register", registercreatorController);
+router.post("/creator/login", logincreatorController);
+router.post("/creator/logout", logoutcreatorController);
 
 export default router;

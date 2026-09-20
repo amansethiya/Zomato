@@ -29,6 +29,9 @@ const Home = () => {
             <a href="#creators" className="text-gray-600 hover:text-orange-500">
               Creators
             </a>
+            <a href="/feeds" className="text-gray-600 hover:text-orange-500">
+              Feeds
+            </a>
           </div>
 
           {/* Auth buttons */}
@@ -81,7 +84,7 @@ const Home = () => {
               </Link>
 
               <Link
-                to="/creator/login"
+                to="/user/login"
                 className="rounded-xl border border-gray-300 bg-white px-7 py-3 text-center font-semibold text-gray-700 transition hover:bg-gray-50"
               >
                 Explore Videos

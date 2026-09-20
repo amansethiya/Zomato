@@ -1,7 +1,7 @@
 import userModel from "../models/user.model.js";
 import bcrypt from "bcrypt";
 import jwt from "jsonwebtoken";
-import foodpartnerModel from "../models/foodpartner.model.js";
+import creatorModel from "../models/creator.model.js";
 
 export async function registerController(req, res) {
   const { fullname, email, password } = req.body;
@@ -74,70 +74,64 @@ export async function logoutController(req, res) {
   });
 }
 
-export async function registerFoodPartnerController(req, res) {
-  const { foodpartnername, foodpartneremail, password } = req.body;
-  const isExists = await foodpartnerModel.findOne({
-    foodpartneremail,
+export async function registercreatorController(req, res) {
+  const { creatorusername, creatoremail, password } = req.body;
+  const isExists = await creatorModel.findOne({
+    creatoremail,
   });
   if (isExists) {
     return res.status(400).json({
-      message: "Food-Partner email already registered!",
+      message: "creator email already registered!",
     });
   }
   const hashPassword = await bcrypt.hash(password, 10);
-  const foodPartner = await foodpartnerModel.create({
-    foodpartnername,
-    foodpartneremail,
+  const creator = await creatorModel.create({
+    creatorusername,
+    creatoremail,
     password: hashPassword,
   });
-  const foodPartnerToken = jwt.sign(
-    { id: foodPartner._id },
-    process.env.JWT_SECRET,
-  );
-  res.cookie("foodPartnerToken", foodPartnerToken);
+  const creatorToken = jwt.sign({ id: creator._id }, process.env.JWT_SECRET);
+  res.cookie("creatorToken", creatorToken);
   res.status(201).json({
-    message: "Congretulation you are now Food Partner on Zomato",
-    foodPartner: {
-      foodpartnername,
-      foodpartneremail,
+    message: "Congretulation you are now creator",
+    creator: {
+      creatorusername,
+      creatoremail,
     },
-    foodPartnerToken,
+    creatorToken,
   });
 }
 
-export async function loginFoodPartnerController(req, res) {
-  const { foodpartneremail, password } = req.body;
-  const foodPartner = await foodpartnerModel.findOne({
-    foodpartneremail,
+export async function logincreatorController(req, res) {
+  const { creatoremail, password } = req.body;
+  const creator = await creatorModel.findOne({
+    creatoremail,
   });
-  if (!foodPartner) {
+  if (!creator) {
     return res.status(400).json({
-      message: "Food-Partner is not registered registered!",
+      message: "creator is not registered registered!",
     });
   }
-  const checkPassword = await bcrypt.compare(password, foodPartner.password);
+  const checkPassword = await bcrypt.compare(password, creator.password);
   if (!checkPassword) {
     return res.status(400).json({
-      message: "Food-Partner password is wrong!",
+      message: "creator password is wrong!",
     });
   }
-  const foodPartnerToken = jwt.sign(
-    { id: foodPartner._id },
-    process.env.JWT_SECRET,
-  );
-  res.cookie("foodPartnerToken", foodPartnerToken);
+  const creatorToken = jwt.sign({ id: creator._id }, process.env.JWT_SECRET);
+  res.cookie("creatorToken", creatorToken);
   res.status(201).json({
-    message: "Congretulation you are now Food Partner on Zomato",
-    foodPartner: {
-      FoodPartnerName: foodPartner.foodpartnername,
-      FoodPartnerEmail: foodPartner.foodpartneremail,
+    message: "Congretulation you are now creator",
+    creator: {
+      creatorUsername: creator.creatorusername,
+      creatorEmail: creator.creatoremail,
     },
-    foodPartnerToken,
+    creatorToken,
   });
 }
 
-export async function logoutFoodPartnerController(req, res) {
-  res.clearCookie("foodPartnerToken");
+export async function logoutcreatorController(req, res) {
+  res.clearCookie("creatorToken");
   res.status(200).json({
     message: "user Logged-Out Successfully",
   });

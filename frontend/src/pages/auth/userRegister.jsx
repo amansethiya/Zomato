@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import "../../index.css";
+import axios from "axios";
 
 import { Link } from "react-router-dom";
 
@@ -11,21 +12,18 @@ const UserRegister = () => {
     email: "",
     password: "",
   });
-
   const handleChange = (e) => {
-    setFormData({
-      ...formData,
-      [e.target.name]: e.target.value,
-    });
+    setFormData({ ...formData, [e.target.name]: e.target.value });
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
 
-    console.log("User Register Data:", formData);
-
-    // Later you can send this data to your backend:
-    // axios.post("http://localhost:3000/api/auth/register", formData)
+    try {
+      await axios.post("http://localhost:3000/auth/user/register", formData);
+    } catch (err) {
+      console.log(err.response?.data);
+    }
   };
 
   return (

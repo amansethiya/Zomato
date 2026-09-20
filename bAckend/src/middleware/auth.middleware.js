@@ -1,18 +1,18 @@
-import foodpartnerModel from "../models/foodpartner.model.js";
+import creatorModel from "../models/creator.model.js";
 import userModel from "../models/user.model.js";
 import jwt from "jsonwebtoken";
 
-export async function authFoodPartnerMiddleware(req, res, next) {
-  const token = req.cookies.foodPartnerToken;
+export async function authcreatorMiddleware(req, res, next) {
+  const token = req.cookies.creatorToken;
   if (!token) {
     return res.status(400).json({
-      message: "user must be a foodPartner",
+      message: "user must be a creator",
     });
   }
   try {
     const decoded = jwt.verify(token, process.env.JWT_SECRET);
-    const foodPartner = await foodpartnerModel.findById(decoded.id);
-    req.foodpartner = foodPartner;
+    const creator = await creatorModel.findById(decoded.id);
+    req.creator = creator;
     next();
   } catch (err) {
     return res.status(401).json({

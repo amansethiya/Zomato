@@ -1,27 +1,27 @@
-import foodItemModel from "../models/fooditem.model.js";
+import foodVideoModel from "../models/foodVideo.model.js";
 import { uploadFile } from "../services/storage.service.js";
 import { v4 as uuid } from "uuid";
 
-export async function createFoodController(req, res) {
+export async function addFoodVideoController(req, res) {
   const { name, video, description } = req.body;
   const fileUploadResult = await uploadFile(req.file.buffer, uuid());
 
-  const foodItem = await foodItemModel.create({
+  const foodVideo = await foodVideoModel.create({
     name: req.body.name,
     description: req.body.description,
     video: fileUploadResult.url,
-    foodPartner: req.foodpartner._id,
+    creator: req.creator._id,
   });
   res.status(200).json({
-    message: "congretulation! food item created.",
-    foodItem,
+    message: "congretulation! food Video Added.",
+    foodVideo,
   });
 }
 
-export async function getFoodController(req, res) {
-  const foodItems = await foodItemModel.find({});
+export async function getFoodVideoController(req, res) {
+  const foodVideos = await foodVideoModel.find({});
   res.status(200).json({
     message: "wow! i have found a food videos for you.",
-    foodItems,
+    foodVideos,
   });
 }

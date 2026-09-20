@@ -1,6 +1,6 @@
 import mongoose from "mongoose";
 
-const foodSchema = new mongoose.Schema({
+const foodVideoSchema = new mongoose.Schema({
   name: {
     type: String,
     required: true,
@@ -13,11 +13,11 @@ const foodSchema = new mongoose.Schema({
     type: String,
     required: true,
   },
-  foodPartner: {
+  creator: {
     type: mongoose.Schema.Types.ObjectId,
-    ref: "foodpartner",
+    ref: "creator",
   },
 });
 
-const foodItemModel = mongoose.model("fooditem", foodSchema);
-export default foodItemModel;
+const foodVideoModel = mongoose.model("foodVideo", foodVideoSchema);
+export default foodVideoModel;
