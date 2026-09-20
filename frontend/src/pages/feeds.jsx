@@ -1,9 +1,11 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import "../index.css";
+import axios from "axios";
+import { useNavigate } from "react-router-dom";
 
 const Feed = () => {
   // Dummy feed data
-  const posts = [
+  const videos = [
     {
       id: 1,
       video:
@@ -54,6 +56,14 @@ const Feed = () => {
     },
   ];
 
+  const [video, setvideo] = useState(videos);
+
+  useEffect(() => {
+    axios.get("http://localhost:3000/foodvideo/").then((response) => {
+      setvideo(response.data.foodVideo);
+    });
+  });
+
   return (
     <div className="min-h-screen bg-gray-50">
       {/* ================= NAVBAR ================= */}
@@ -90,23 +100,23 @@ const Feed = () => {
           </p>
         </div>
 
-        {/* Posts */}
+        {/* videos */}
         <div className="space-y-8">
-          {posts.map((post) => (
+          {videos.map((video) => (
             <article
-              key={post.id}
+              key={video.id}
               className="overflow-hidden rounded-2xl border border-gray-200 bg-white shadow-sm"
             >
               {/* ================= CREATOR ================= */}
               <div className="flex items-center gap-3 px-4 py-4">
                 {/* Avatar */}
                 <div className="flex h-10 w-10 items-center justify-center rounded-full bg-orange-100 font-semibold text-orange-600">
-                  {post.creatorUsername.charAt(0).toUpperCase()}
+                  {video.creatorUsername.charAt(0).toUpperCase()}
                 </div>
 
                 <div>
                   <p className="font-semibold text-gray-900">
-                    @{post.creatorUsername}
+                    @{video.creatorUsername}
                   </p>
 
                   <p className="text-xs text-gray-500">Food Creator</p>
@@ -116,7 +126,7 @@ const Feed = () => {
               {/* ================= VIDEO ================= */}
               <div className="aspect-video w-full bg-black">
                 <video
-                  src={post.video}
+                  src={video.video}
                   controls
                   playsInline
                   preload="metadata"
@@ -124,13 +134,15 @@ const Feed = () => {
                 />
               </div>
 
-              {/* ================= POST CONTENT ================= */}
+              {/* ================= video CONTENT ================= */}
               <div className="p-5">
                 {/* Food Name */}
-                <h3 className="text-xl font-bold text-gray-900">{post.name}</h3>
+                <h3 className="text-xl font-bold text-gray-900">
+                  {video.name}
+                </h3>
 
                 {/* Caption */}
-                <p className="mt-2 leading-6 text-gray-600">{post.caption}</p>
+                <p className="mt-2 leading-6 text-gray-600">{video.caption}</p>
 
                 {/* Actions */}
                 <div className="mt-5 flex items-center gap-5 border-t border-gray-100 pt-4">
