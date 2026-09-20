@@ -1,8 +1,12 @@
 import React, { useState } from "react";
 import "../../index.css";
 import { Link } from "react-router-dom";
+import axios from "axios";
+import { useNavigate } from "react-router-dom";
 
 const UserLogin = () => {
+  const navigate = useNavigate();
+
   const [showPassword, setShowPassword] = useState(false);
 
   const [formData, setFormData] = useState({
@@ -17,13 +21,17 @@ const UserLogin = () => {
     });
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
 
-    console.log("User Login Data:", formData);
-
-    // Later connect your backend API:
-    // axios.post("http://localhost:3000/api/auth/login", formData)
+    try {
+      await axios.post("http://localhost:3000/auth/user/login", formData, {
+        withCredentials: true,
+      });
+      navigate("/");
+    } catch (err) {
+      console.log(err);
+    }
   };
 
   return (

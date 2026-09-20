@@ -1,12 +1,15 @@
 import React, { useState } from "react";
 import "../../index.css";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
+import axios from "axios";
 
 const CreatorLogin = () => {
+  const navigate = useNavigate();
+
   const [showPassword, setShowPassword] = useState(false);
 
   const [formData, setFormData] = useState({
-    email: "",
+    creatoremail: "",
     password: "",
   });
 
@@ -17,13 +20,18 @@ const CreatorLogin = () => {
     });
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
 
-    console.log("Creator Login Data:", formData);
+    try {
+      await axios.post("http://localhost:3000/auth/creator/login", formData, {
+        withCredentials: true,
+      });
 
-    // Connect your backend here
-    // axios.post("/api/food-partner/login", formData)
+      navigate("/creatorDashboard");
+    } catch (err) {
+      console.log(err);
+    }
   };
 
   return (
@@ -102,20 +110,20 @@ const CreatorLogin = () => {
 
             {/* Login Form */}
             <form onSubmit={handleSubmit} className="mt-8 space-y-5">
-              {/* Email */}
+              {/* creatoremail */}
               <div>
                 <label
-                  htmlFor="email"
+                  htmlFor="creatoremail"
                   className="mb-2 block text-sm font-medium text-gray-700"
                 >
-                  Email Address
+                  creatoremail Address
                 </label>
 
                 <input
-                  id="email"
-                  name="email"
+                  id="creatoremail"
+                  name="creatoremail"
                   type="email"
-                  value={formData.email}
+                  value={formData.creatoremail}
                   onChange={handleChange}
                   placeholder="creator@example.com"
                   required

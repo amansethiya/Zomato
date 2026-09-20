@@ -1,13 +1,15 @@
 import React, { useState } from "react";
 import "../../index.css";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
+import axios from "axios";
 
 const CreatorRegister = () => {
   const [showPassword, setShowPassword] = useState(false);
+  const navigate = useNavigate();
 
   const [formData, setFormData] = useState({
-    username: "",
-    email: "",
+    creatorusername: "",
+    creatoremail: "",
     password: "",
   });
 
@@ -18,13 +20,21 @@ const CreatorRegister = () => {
     });
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
 
-    console.log("Creator Register Data:", formData);
-
-    // Connect your backend here
-    // axios.post("/api/food-partner/register", formData)
+    try {
+      await axios.post(
+        "http://localhost:3000/auth/creator/register",
+        formData,
+        {
+          withCredentials: true,
+        },
+      );
+      navigate("/creatorDashboard");
+    } catch (err) {
+      console.log(err);
+    }
   };
 
   return (
@@ -103,41 +113,41 @@ const CreatorRegister = () => {
 
             {/* Form */}
             <form onSubmit={handleSubmit} className="mt-8 space-y-5">
-              {/* Username */}
+              {/* creatorusername */}
               <div>
                 <label
-                  htmlFor="username"
+                  htmlFor="creatorusername"
                   className="mb-2 block text-sm font-medium text-gray-700"
                 >
-                  Username
+                  creatorusername
                 </label>
 
                 <input
-                  id="username"
-                  name="username"
+                  id="creatorusername"
+                  name="creatorusername"
                   type="text"
-                  value={formData.username}
+                  value={formData.creatorusername}
                   onChange={handleChange}
-                  placeholder="Enter your username"
+                  placeholder="Enter your creatorusername"
                   required
                   className="w-full rounded-xl border border-gray-300 px-4 py-3 outline-none transition placeholder:text-gray-400 focus:border-purple-500 focus:ring-2 focus:ring-purple-100"
                 />
               </div>
 
-              {/* Email */}
+              {/* creatoremail */}
               <div>
                 <label
-                  htmlFor="email"
+                  htmlFor="creatoremail"
                   className="mb-2 block text-sm font-medium text-gray-700"
                 >
-                  Email Address
+                  creatoremail Address
                 </label>
 
                 <input
-                  id="email"
-                  name="email"
+                  id="creatoremail"
+                  name="creatoremail"
                   type="email"
-                  value={formData.email}
+                  value={formData.creatoremail}
                   onChange={handleChange}
                   placeholder="creator@example.com"
                   required

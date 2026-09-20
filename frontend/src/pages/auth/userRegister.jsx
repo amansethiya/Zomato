@@ -1,10 +1,13 @@
 import React, { useState } from "react";
 import "../../index.css";
 import axios from "axios";
+import { useNavigate } from "react-router-dom";
 
 import { Link } from "react-router-dom";
 
 const UserRegister = () => {
+  const navigate = useNavigate();
+
   const [showPassword, setShowPassword] = useState(false);
 
   const [formData, setFormData] = useState({
@@ -20,9 +23,12 @@ const UserRegister = () => {
     e.preventDefault();
 
     try {
-      await axios.post("http://localhost:3000/auth/user/register", formData);
+      await axios.post("http://localhost:3000/auth/user/register", formData, {
+        withCredentials: true,
+      });
+      navigate("/");
     } catch (err) {
-      console.log(err.response?.data);
+      console.log(err);
     }
   };
 
