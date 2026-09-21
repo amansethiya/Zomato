@@ -3,6 +3,7 @@ import cookieParser from "cookie-parser";
 import authRouter from "./routes/auth.route.js";
 import foodVideoRouter from "./routes/foodVideo.route.js";
 import cors from "cors";
+import creatorRouter from "./routes/creator.route.js";
 
 const app = express();
 app.use(express.json());
@@ -16,5 +17,6 @@ app.use(
 
 app.use("/auth", authRouter);
 app.use("/foodvideo", foodVideoRouter);
+app.use("/creator", creatorRouter);
 
 export default app;

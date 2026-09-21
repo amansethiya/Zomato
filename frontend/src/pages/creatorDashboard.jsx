@@ -1,6 +1,7 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import axios from "axios";
+import Navbar from "../components/navbar";
 
 const CreatorDashboard = () => {
   const [video, setVideo] = useState(null);
@@ -11,30 +12,17 @@ const CreatorDashboard = () => {
     description: "",
   });
 
-  // Dummy uploaded videos
-  const [recentPosts] = useState([
-    {
-      id: 1,
-      name: "Creamy White Pasta",
-      description: "Easy and delicious creamy pasta recipe.",
-      views: 1240,
-      date: "Today",
-    },
-    {
-      id: 2,
-      name: "Spicy Paneer",
-      description: "Quick and spicy paneer recipe.",
-      views: 856,
-      date: "Yesterday",
-    },
-    {
-      id: 3,
-      name: "Chocolate Cake",
-      description: "Soft chocolate cake for chocolate lovers.",
-      views: 2100,
-      date: "3 days ago",
-    },
-  ]);
+  // recent uploaded videos
+  const [recentPosts, setRecentPosts] = useState([]);
+  useEffect(() => {
+    axios
+      .get("http://localhost:3000/foodvideo/", {
+        withCredentials: true,
+      })
+      .then((response) => {
+        setRecentPosts(response.data.foodVideos);
+      });
+  }, []);
 
   const handleChange = (e) => {
     setFormData({
@@ -108,26 +96,7 @@ const CreatorDashboard = () => {
   return (
     <div className="min-h-screen bg-gray-50">
       {/* ================= NAVBAR ================= */}
-      <nav className="sticky top-0 z-50 border-b border-gray-200 bg-white">
-        <div className="mx-auto flex max-w-7xl items-center justify-between px-4 py-4 sm:px-6">
-          {/* Logo */}
-          <Link to="/" className="text-2xl font-bold text-purple-600">
-            FoodieHub
-          </Link>
-
-          {/* Right Side */}
-          <div className="flex items-center gap-4">
-            <span className="hidden text-sm text-gray-500 sm:block">
-              Creator Studio
-            </span>
-
-            {/* Avatar */}
-            <div className="flex h-10 w-10 items-center justify-center rounded-full bg-purple-100 font-semibold text-purple-600">
-              A
-            </div>
-          </div>
-        </div>
-      </nav>
+      <Navbar />
 
       {/* ================= MAIN ================= */}
       <main className="mx-auto max-w-7xl px-4 py-8 sm:px-6">
@@ -358,7 +327,7 @@ const CreatorDashboard = () => {
               <div className="mt-6 space-y-4">
                 {recentPosts.map((post) => (
                   <div
-                    key={post.id}
+                    key={post._id}
                     className="rounded-xl border border-gray-100 p-4 transition hover:border-purple-200 hover:bg-purple-50/30"
                   >
                     <div className="flex items-start justify-between gap-4">

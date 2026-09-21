@@ -7,6 +7,7 @@ import CreatorLogin from "../pages/auth/creatorLogin";
 import Home from "../pages/home";
 import CreatorDashboard from "../pages/creatorDashboard";
 import Feeds from "../pages/feeds";
+import Profile from "../pages/profile";
 
 const appRouter = () => {
   return (
@@ -20,6 +21,7 @@ const appRouter = () => {
           <Route path="/creator/login" element={<CreatorLogin />} />
           <Route path="/CreatorDashboard" element={<CreatorDashboard />} />
           <Route path="/feeds" element={<Feeds />} />
+          <Route path="/creator/:id" element={<Profile />} />
         </Routes>
       </Router>
     </>

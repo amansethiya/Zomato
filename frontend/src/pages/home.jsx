@@ -1,57 +1,13 @@
 import React from "react";
 import "../index.css";
 import { Link } from "react-router-dom";
+import Navbar from "../components/navbar";
 
 const Home = () => {
   return (
     <div className="min-h-screen bg-white text-gray-900">
       {/* Navbar */}
-      <nav className="border-b border-gray-200 bg-white">
-        <div className="mx-auto flex max-w-7xl items-center justify-between px-6 py-4">
-          {/* Logo */}
-          <Link to="/" className="text-2xl font-bold text-orange-500">
-            FoodieHub
-          </Link>
-
-          {/* Navigation */}
-          <div className="hidden items-center gap-8 md:flex">
-            <a href="#features" className="text-gray-600 hover:text-orange-500">
-              Features
-            </a>
-
-            <a
-              href="#how-it-works"
-              className="text-gray-600 hover:text-orange-500"
-            >
-              How It Works
-            </a>
-
-            <a href="#creators" className="text-gray-600 hover:text-orange-500">
-              Creators
-            </a>
-            <a href="/feeds" className="text-gray-600 hover:text-orange-500">
-              Feeds
-            </a>
-          </div>
-
-          {/* Auth buttons */}
-          <div className="flex items-center gap-3">
-            <Link
-              to="/user/login"
-              className="rounded-lg px-4 py-2 text-sm font-medium text-gray-700 hover:bg-gray-100"
-            >
-              Login
-            </Link>
-
-            <Link
-              to="/user/register"
-              className="rounded-lg bg-orange-500 px-4 py-2 text-sm font-medium text-white transition hover:bg-orange-600"
-            >
-              Sign Up
-            </Link>
-          </div>
-        </div>
-      </nav>
+      <Navbar />
 
       {/* Hero Section */}
       <section className="bg-orange-50">
@@ -77,14 +33,14 @@ const Home = () => {
 
             <div className="mt-8 flex flex-col gap-4 sm:flex-row">
               <Link
-                to="/creator/register"
+                to="/creatordashboard"
                 className="rounded-xl bg-orange-500 px-7 py-3 text-center font-semibold text-white transition hover:bg-orange-600"
               >
                 Join the Community
               </Link>
 
               <Link
-                to="/user/login"
+                to="/feeds"
                 className="rounded-xl border border-gray-300 bg-white px-7 py-3 text-center font-semibold text-gray-700 transition hover:bg-gray-50"
               >
                 Explore Videos

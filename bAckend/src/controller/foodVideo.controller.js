@@ -19,7 +19,9 @@ export async function addFoodVideoController(req, res) {
 }
 
 export async function getFoodVideoController(req, res) {
-  const foodVideos = await foodVideoModel.find({});
+  const foodVideos = await foodVideoModel
+    .find({})
+    .populate("creator", "username");
   res.status(200).json({
     message: "wow! i have found a food videos for you.",
     foodVideos,
