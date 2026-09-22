@@ -26,7 +26,11 @@ export async function registerController(req, res) {
     },
     process.env.JWT_SECRET,
   );
-  res.cookie("token", token);
+  res.cookie("token", token, {
+    httpOnly: true,
+    secure: false,
+    sameSite: "lax",
+  });
   res.status(201).json({
     message: "user Registered Successfully",
     user: { yourId: user._id, FullName: user.fullname, Email: user.email },
@@ -56,7 +60,11 @@ export async function loginController(req, res) {
     },
     process.env.JWT_SECRET,
   );
-  res.cookie("token", token);
+  res.cookie("token", token, {
+    httpOnly: true,
+    secure: false,
+    sameSite: "lax",
+  });
   res.status(201).json({
     message: "user Logged-In Successfully",
     user: {
@@ -91,7 +99,11 @@ export async function registercreatorController(req, res) {
     password: hashPassword,
   });
   const creatorToken = jwt.sign({ id: creator._id }, process.env.JWT_SECRET);
-  res.cookie("creatorToken", creatorToken);
+  res.cookie("creatorToken", creatorToken, {
+    httpOnly: true,
+    secure: false,
+    sameSite: "lax",
+  });
   res.status(201).json({
     message: "Congretulation you are now creator",
     creator: {
@@ -119,7 +131,11 @@ export async function logincreatorController(req, res) {
     });
   }
   const creatorToken = jwt.sign({ id: creator._id }, process.env.JWT_SECRET);
-  res.cookie("creatorToken", creatorToken);
+  res.cookie("creatorToken", creatorToken, {
+    httpOnly: true,
+    secure: false,
+    sameSite: "lax",
+  });
   res.status(201).json({
     message: "Congretulation you are now creator",
     creator: {
