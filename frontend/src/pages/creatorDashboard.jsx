@@ -51,10 +51,6 @@ const CreatorDashboard = () => {
     }
 
     try {
-      console.log("Video:", video);
-      console.log("Food Name:", formData.name);
-      console.log("Description:", formData.description);
-
       const data = new FormData();
 
       data.append("video", video);

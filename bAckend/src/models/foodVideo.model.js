@@ -17,6 +17,10 @@ const foodVideoSchema = new mongoose.Schema({
     type: mongoose.Schema.Types.ObjectId,
     ref: "creator",
   },
+  likecount: {
+    type: Number,
+    default: 0,
+  },
 });
 
 const foodVideoModel = mongoose.model("foodVideo", foodVideoSchema);

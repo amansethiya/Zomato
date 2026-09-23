@@ -6,6 +6,7 @@ import {
 import {
   addFoodVideoController,
   getFoodVideoController,
+  likeController,
 } from "../controller/foodVideo.controller.js";
 import multer from "multer";
 
@@ -22,5 +23,7 @@ router.post(
   addFoodVideoController,
 );
 router.get("/", authUserMiddleware, getFoodVideoController);
+
+router.post("/like", authUserMiddleware, likeController);
 
 export default router;

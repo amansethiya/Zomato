@@ -1,6 +1,7 @@
 import foodVideoModel from "../models/foodVideo.model.js";
 import { uploadFile } from "../services/storage.service.js";
 import { v4 as uuid } from "uuid";
+import likeModel from "../models/likes.model.js";
 
 export async function addFoodVideoController(req, res) {
   const { name, video, description } = req.body;
@@ -25,5 +26,44 @@ export async function getFoodVideoController(req, res) {
   res.status(200).json({
     message: "wow! i have found a food videos for you.",
     foodVideos,
+  });
+}
+
+export async function likeController(req, res) {
+  const { foodId } = req.body;
+  const user = req.user._id;
+
+  const isAlreadyLiked = await likeModel.findOne({
+    user: user._id,
+    food: foodId,
+  });
+
+  if (isAlreadyLiked) {
+    await likeModel.deleteOne({
+      user: user._id,
+      food: foodId,
+    });
+
+    await foodVideoModel.findByIdAndUpdate(foodId, {
+      $inc: { likecount: -1 },
+    });
+
+    res.status(200).json({
+      message: "extra like deleted",
+    });
+  }
+
+  const like = await likeModel.create({
+    user: req.user._id,
+    food: foodId,
+  });
+
+  await foodVideoModel.findByIdAndUpdate(foodId, {
+    $inc: { likecount: 1 },
+  });
+
+  res.status(201).json({
+    message: "food liked by someone",
+    like,
   });
 }
