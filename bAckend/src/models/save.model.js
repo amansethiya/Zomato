@@ -1,6 +1,6 @@
 import mongoose from "mongoose";
 
-const likeSchema = new mongoose.Schema(
+const saveSchema = new mongoose.Schema(
   {
     user: {
       type: mongoose.Schema.Types.ObjectId,
@@ -13,9 +13,11 @@ const likeSchema = new mongoose.Schema(
       required: true,
     },
   },
-  { timestamps: true },
+  {
+    timestamps: true,
+  },
 );
 
-const likeModel = mongoose.model("likes", likeSchema);
+const saveModel = mongoose.model("saved", saveSchema);
 
-export default likeModel;
+export default saveModel;
