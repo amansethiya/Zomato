@@ -3,6 +3,7 @@ import { uploadFile } from "../services/storage.service.js";
 import { v4 as uuid } from "uuid";
 import likeModel from "../models/likes.model.js";
 import saveModel from "../models/save.model.js";
+import creatorModel from "../models/creator.model.js";
 
 export async function addFoodVideoController(req, res) {
   const { name, video, description } = req.body;
@@ -23,7 +24,7 @@ export async function addFoodVideoController(req, res) {
 export async function getFoodVideoController(req, res) {
   const foodVideos = await foodVideoModel
     .find({})
-    .populate("creator", "username");
+    .populate("creator", "creatorusername");
   res.status(200).json({
     message: "wow! i have found a food videos for you.",
     foodVideos,
