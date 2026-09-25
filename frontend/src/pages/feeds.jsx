@@ -237,17 +237,24 @@ const Feed = () => {
         <main className="flex min-h-[70vh] items-center justify-center px-4">
           <div className="w-full max-w-md rounded-2xl border border-red-100 bg-white p-8 text-center shadow-sm">
             <h2 className="text-xl font-bold text-gray-900">
-              Something went wrong
+              Unable to load feeds
             </h2>
 
             <p className="mt-2 text-sm text-gray-500">{error}</p>
-
-            <button
-              onClick={() => window.location.reload()}
-              className="mt-6 rounded-xl bg-orange-500 px-6 py-3 text-sm font-semibold text-white transition hover:bg-orange-600"
-            >
-              Try Again
-            </button>
+            <div className="flex gap-2 justify-center">
+              <button
+                onClick={() => window.location.reload()}
+                className="mt-6 rounded-xl bg-orange-500 px-6 py-3 text-sm font-semibold text-white transition hover:bg-orange-600"
+              >
+                Try Again
+              </button>
+              <Link
+                to={"/user/login"}
+                className="mt-6 rounded-xl bg-orange-500 px-6 py-3 text-sm font-semibold text-white transition hover:bg-orange-600"
+              >
+                Let's Login
+              </Link>
+            </div>
           </div>
         </main>
       </div>

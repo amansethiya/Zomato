@@ -119,13 +119,20 @@ const CreatorProfile = () => {
             </h2>
 
             <p className="mt-2 text-sm text-gray-500">{error}</p>
-
-            <Link
-              to="/feed"
-              className="mt-6 inline-block rounded-xl bg-purple-600 px-6 py-3 text-sm font-semibold text-white transition hover:bg-purple-700"
-            >
-              Back to Feed
-            </Link>
+            <div className="flex gap-1 justify-center">
+              <Link
+                to="/feeds"
+                className="mt-6 inline-block rounded-xl bg-purple-600 px-6 py-3 text-sm font-semibold text-white transition hover:bg-purple-700"
+              >
+                Back to Feed
+              </Link>
+              <Link
+                to="/creator/login"
+                className="mt-6 inline-block rounded-xl bg-purple-600 px-6 py-3 text-sm font-semibold text-white transition hover:bg-purple-700"
+              >
+                Let's Login
+              </Link>
+            </div>
           </div>
         </main>
       </div>
