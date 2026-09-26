@@ -2,6 +2,17 @@ import React, { useEffect, useState } from "react";
 import "../index.css";
 import axios from "axios";
 import { Link } from "react-router-dom";
+
+import {
+  Heart,
+  Bookmark,
+  Share2,
+  Video,
+  AlertCircle,
+  RefreshCw,
+  LogIn,
+} from "lucide-react";
+
 import Navbar from "../components/navbar";
 
 const Feed = () => {
@@ -9,13 +20,12 @@ const Feed = () => {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState("");
 
-  /*
-    Store the IDs of videos that the current user has saved.
-
-    Example:
-    savedVideos = ["videoId1", "videoId2"]
-  */
+  // Store IDs of saved videos
   const [savedVideos, setSavedVideos] = useState([]);
+
+  // =========================================================
+  // GET VIDEOS
+  // =========================================================
 
   useEffect(() => {
     const getVideos = async () => {
@@ -49,13 +59,6 @@ const Feed = () => {
 
   const handleLike = async (videoId) => {
     try {
-      /*
-        Change this URL according to your backend.
-
-        Example backend:
-        POST /foodvideo/:videoId/like
-      */
-
       const response = await axios.post(
         `http://localhost:3000/foodvideo/${videoId}/like`,
         {},
@@ -63,15 +66,6 @@ const Feed = () => {
           withCredentials: true,
         },
       );
-
-      /*
-        Expected backend response example:
-
-        {
-          liked: true,
-          likesCount: 10
-        }
-      */
 
       setVideos((previousVideos) =>
         previousVideos.map((item) =>
@@ -97,13 +91,6 @@ const Feed = () => {
 
   const handleSave = async (videoId) => {
     try {
-      /*
-        Change this URL according to your backend.
-
-        Example backend:
-        POST /foodvideo/:videoId/save
-      */
-
       const response = await axios.post(
         `http://localhost:3000/foodvideo/${videoId}/save`,
         {},
@@ -111,14 +98,6 @@ const Feed = () => {
           withCredentials: true,
         },
       );
-
-      /*
-        Expected response:
-
-        {
-          saved: true
-        }
-      */
 
       setSavedVideos((previous) => {
         if (response.data.saved) {
@@ -143,35 +122,20 @@ const Feed = () => {
 
     const shareData = {
       title: item.name,
-      text: `${item.name} by @${item.creator?.username}`,
+      text: `${item.name} by @${item.creator?.creatorusername}`,
       url: shareUrl,
     };
 
     try {
-      /*
-        If browser supports native sharing
-        (mostly mobile browsers)
-      */
-
       if (navigator.share) {
         await navigator.share(shareData);
         return;
       }
 
-      /*
-        Desktop fallback:
-        copy link to clipboard
-      */
-
       await navigator.clipboard.writeText(shareUrl);
 
       alert("Video link copied to clipboard!");
     } catch (error) {
-      /*
-        User closing the native share window
-        is not really an error.
-      */
-
       if (error.name !== "AbortError") {
         console.error("Share error:", error);
       }
@@ -200,6 +164,7 @@ const Feed = () => {
                 key={item}
                 className="overflow-hidden rounded-2xl border border-gray-200 bg-white"
               >
+                {/* Creator Skeleton */}
                 <div className="flex items-center gap-3 p-4">
                   <div className="h-10 w-10 animate-pulse rounded-full bg-gray-200" />
 
@@ -210,8 +175,10 @@ const Feed = () => {
                   </div>
                 </div>
 
+                {/* Video Skeleton */}
                 <div className="aspect-video animate-pulse bg-gray-200" />
 
+                {/* Content Skeleton */}
                 <div className="space-y-3 p-5">
                   <div className="h-5 w-48 animate-pulse rounded bg-gray-200" />
 
@@ -235,24 +202,35 @@ const Feed = () => {
         <Navbar />
 
         <main className="flex min-h-[70vh] items-center justify-center px-4">
-          <div className="w-full max-w-md rounded-2xl border border-red-100 bg-white p-8 text-center shadow-sm">
-            <h2 className="text-xl font-bold text-gray-900">
-              Unable to load feeds
+          <div className="w-full max-w-md rounded-2xl border border-gray-200 bg-white p-8 text-center shadow-sm">
+            {/* Error Icon */}
+            <div className="mx-auto flex h-14 w-14 items-center justify-center rounded-full bg-orange-50 text-orange-500">
+              <AlertCircle size={28} />
+            </div>
+
+            <h2 className="mt-4 text-xl font-bold text-gray-900">
+              Unable to load feed
             </h2>
 
             <p className="mt-2 text-sm text-gray-500">{error}</p>
-            <div className="flex gap-2 justify-center">
+
+            <div className="mt-6 flex justify-center gap-3">
+              {/* Try Again */}
               <button
                 onClick={() => window.location.reload()}
-                className="mt-6 rounded-xl bg-orange-500 px-6 py-3 text-sm font-semibold text-white transition hover:bg-orange-600"
+                className="flex items-center gap-2 rounded-lg bg-orange-500 px-5 py-2.5 text-sm font-semibold text-white transition hover:bg-orange-600"
               >
+                <RefreshCw size={16} />
                 Try Again
               </button>
+
+              {/* Login */}
               <Link
-                to={"/user/login"}
-                className="mt-6 rounded-xl bg-orange-500 px-6 py-3 text-sm font-semibold text-white transition hover:bg-orange-600"
+                to="/user/login"
+                className="flex items-center gap-2 rounded-lg border border-orange-200 px-5 py-2.5 text-sm font-semibold text-orange-600 transition hover:bg-orange-50"
               >
-                Let's Login
+                <LogIn size={16} />
+                Login
               </Link>
             </div>
           </div>
@@ -261,17 +239,16 @@ const Feed = () => {
     );
   }
 
+  // =========================================================
+  // MAIN FEED
+  // =========================================================
+
   return (
     <div className="min-h-screen bg-gray-50">
-      {/* ================= NAVBAR ================= */}
-
       <Navbar />
-
-      {/* ================= FEED ================= */}
 
       <main className="mx-auto max-w-2xl px-4 py-8">
         {/* Feed Header */}
-
         <div className="mb-8">
           <h1 className="text-3xl font-bold tracking-tight text-gray-900">
             Discover Food
@@ -282,18 +259,28 @@ const Feed = () => {
           </p>
         </div>
 
-        {/* ================= EMPTY FEED ================= */}
+        {/* =====================================================
+            EMPTY FEED
+        ===================================================== */}
 
         {videos.length === 0 ? (
           <div className="rounded-2xl border border-gray-200 bg-white px-6 py-16 text-center">
-            <h2 className="text-xl font-bold text-gray-900">No videos yet</h2>
+            <div className="mx-auto flex h-14 w-14 items-center justify-center rounded-full bg-orange-50 text-orange-500">
+              <Video size={26} />
+            </div>
+
+            <h2 className="mt-4 text-xl font-bold text-gray-900">
+              No videos yet
+            </h2>
 
             <p className="mt-2 text-sm text-gray-500">
               Food creators haven't uploaded anything yet.
             </p>
           </div>
         ) : (
-          /* ================= VIDEOS ================= */
+          /* =====================================================
+             VIDEOS
+          ===================================================== */
 
           <div className="space-y-8">
             {videos.map((item) => {
@@ -304,7 +291,9 @@ const Feed = () => {
                   key={item._id}
                   className="overflow-hidden rounded-2xl border border-gray-200 bg-white shadow-sm transition hover:shadow-md"
                 >
-                  {/* ================= CREATOR ================= */}
+                  {/* =================================================
+                      CREATOR
+                  ================================================= */}
 
                   <div className="flex items-center justify-between px-4 py-4">
                     <Link
@@ -312,13 +301,11 @@ const Feed = () => {
                       className="flex min-w-0 items-center gap-3"
                     >
                       {/* Avatar */}
-
                       <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-full bg-orange-100 font-semibold text-orange-600">
                         {item.creator?.creatorusername?.charAt(0).toUpperCase()}
                       </div>
 
                       {/* Username */}
-
                       <div className="min-w-0">
                         <p className="truncate font-semibold text-gray-900 hover:text-orange-500">
                           @{item.creator?.creatorusername}
@@ -329,7 +316,9 @@ const Feed = () => {
                     </Link>
                   </div>
 
-                  {/* ================= VIDEO ================= */}
+                  {/* =================================================
+                      VIDEO
+                  ================================================= */}
 
                   <div className="aspect-video w-full bg-black">
                     <video
@@ -341,26 +330,27 @@ const Feed = () => {
                     />
                   </div>
 
-                  {/* ================= CONTENT ================= */}
+                  {/* =================================================
+                      CONTENT
+                  ================================================= */}
 
                   <div className="p-5">
                     {/* Food Name */}
-
                     <h2 className="text-xl font-bold text-gray-900">
                       {item.name}
                     </h2>
 
                     {/* Description */}
-
                     <p className="mt-2 leading-6 text-gray-600">
                       {item.description}
                     </p>
 
-                    {/* ================= ACTIONS ================= */}
+                    {/* =================================================
+                        ACTIONS
+                    ================================================= */}
 
                     <div className="mt-5 flex items-center border-t border-gray-100 pt-4">
                       {/* Like */}
-
                       <button
                         onClick={() => handleLike(item._id)}
                         className={`flex items-center gap-2 rounded-lg px-3 py-2 text-sm font-medium transition ${
@@ -369,15 +359,16 @@ const Feed = () => {
                             : "text-gray-600 hover:bg-gray-50 hover:text-red-500"
                         }`}
                       >
-                        <span className="text-lg">
-                          {item.liked ? "♥" : "♡"}
-                        </span>
+                        <Heart
+                          size={19}
+                          strokeWidth={2}
+                          fill={item.liked ? "currentColor" : "none"}
+                        />
 
                         <span>{item.likesCount || 0}</span>
                       </button>
 
                       {/* Save */}
-
                       <button
                         onClick={() => handleSave(item._id)}
                         className={`ml-2 flex items-center gap-2 rounded-lg px-3 py-2 text-sm font-medium transition ${
@@ -386,18 +377,21 @@ const Feed = () => {
                             : "text-gray-600 hover:bg-gray-50 hover:text-purple-600"
                         }`}
                       >
-                        <span className="text-lg">{isSaved ? "★" : "☆"}</span>
+                        <Bookmark
+                          size={19}
+                          strokeWidth={2}
+                          fill={isSaved ? "currentColor" : "none"}
+                        />
 
                         <span>{isSaved ? "Saved" : "Save"}</span>
                       </button>
 
                       {/* Share */}
-
                       <button
                         onClick={() => handleShare(item)}
                         className="ml-auto flex items-center gap-2 rounded-lg px-3 py-2 text-sm font-medium text-gray-600 transition hover:bg-gray-50 hover:text-orange-500"
                       >
-                        <span className="text-lg">↗</span>
+                        <Share2 size={19} strokeWidth={2} />
 
                         <span>Share</span>
                       </button>
@@ -409,7 +403,9 @@ const Feed = () => {
           </div>
         )}
 
-        {/* ================= END ================= */}
+        {/* =====================================================
+            END OF FEED
+        ===================================================== */}
 
         {videos.length > 0 && (
           <div className="py-12 text-center">

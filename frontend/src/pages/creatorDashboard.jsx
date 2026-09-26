@@ -1,9 +1,11 @@
 import React, { useEffect, useState } from "react";
-import { Link } from "react-router-dom";
+import { Link, useParams } from "react-router-dom";
 import axios from "axios";
+import { Video, Heart, Eye, Upload, X, Play, ArrowRight } from "lucide-react";
 import Navbar from "../components/navbar";
 
 const CreatorDashboard = () => {
+  const { id } = useParams();
   const [video, setVideo] = useState(null);
   const [videoPreview, setVideoPreview] = useState("");
 
@@ -12,18 +14,26 @@ const CreatorDashboard = () => {
     description: "",
   });
 
-  // recent uploaded videos
   const [recentPosts, setRecentPosts] = useState([]);
-  useEffect(() => {
-    axios
-      .get("http://localhost:3000/foodvideo/", {
+
+  // Get videos
+  const fetchVideos = async () => {
+    try {
+      const response = await axios.get("http://localhost:3000/foodvideo/", {
         withCredentials: true,
-      })
-      .then((response) => {
-        setRecentPosts(response.data.foodVideos);
       });
+
+      setRecentPosts(response.data.foodVideos || []);
+    } catch (error) {
+      console.error(error);
+    }
+  };
+
+  useEffect(() => {
+    fetchVideos();
   }, []);
 
+  // Input change
   const handleChange = (e) => {
     setFormData({
       ...formData,
@@ -31,17 +41,17 @@ const CreatorDashboard = () => {
     });
   };
 
+  // Video selection
   const handleVideoChange = (e) => {
     const file = e.target.files[0];
 
     if (!file) return;
 
     setVideo(file);
-
-    const previewUrl = URL.createObjectURL(file);
-    setVideoPreview(previewUrl);
+    setVideoPreview(URL.createObjectURL(file));
   };
 
+  // Upload
   const handleSubmit = async (e) => {
     e.preventDefault();
 
@@ -57,19 +67,12 @@ const CreatorDashboard = () => {
       data.append("name", formData.name);
       data.append("description", formData.description);
 
-      const response = await axios.post(
-        "http://localhost:3000/foodvideo/",
-        data,
-        {
-          withCredentials: true,
-        },
-      );
+      await axios.post("http://localhost:3000/foodvideo/", data, {
+        withCredentials: true,
+      });
 
-      console.log("Server Response:", response.data);
+      alert("Video uploaded successfully!");
 
-      alert("Food video uploaded successfully!");
-
-      // Reset form after successful upload
       setVideo(null);
       setVideoPreview("");
 
@@ -77,292 +80,283 @@ const CreatorDashboard = () => {
         name: "",
         description: "",
       });
-    } catch (err) {
-      console.error("Upload Error:", err);
 
-      if (err.response) {
-        console.log("Backend Response:", err.response.data);
-        console.log("Status:", err.response.status);
-      }
-
-      alert("Failed to upload food video.");
+      fetchVideos();
+    } catch (error) {
+      console.error(error);
+      alert("Failed to upload video.");
     }
   };
 
+  // Statistics
+  const totalVideos = recentPosts.length;
+
+  const totalLikes = recentPosts.reduce(
+    (sum, post) => sum + (post.likecount || 0),
+    0,
+  );
+
+  const totalViews = recentPosts.reduce(
+    (sum, post) => sum + (post.views || 0),
+    0,
+  );
+
   return (
-    <div className="min-h-screen bg-gray-50">
-      {/* ================= NAVBAR ================= */}
+    <div className="min-h-screen bg-purple-50/30">
       <Navbar />
 
-      {/* ================= MAIN ================= */}
-      <main className="mx-auto max-w-7xl px-4 py-8 sm:px-6">
+      <main className="mx-auto max-w-6xl px-4 py-8">
         {/* Header */}
-        <div className="mb-8">
-          <p className="text-sm font-semibold uppercase tracking-wide text-purple-600">
-            Creator Studio
-          </p>
+        <div className="mb-6">
+          <p className="text-sm font-medium text-purple-600">Creator Studio</p>
 
-          <h1 className="mt-2 text-3xl font-bold text-gray-900">
+          <h1 className="mt-1 text-2xl font-bold text-gray-900">
             Creator Dashboard
           </h1>
 
-          <p className="mt-2 text-gray-500">
-            Manage your content and share your food creations.
-          </p>
+          <p className="mt-1 text-sm text-gray-500">Manage your food videos.</p>
         </div>
 
-        {/* ================= STATS ================= */}
-        <div className="grid gap-4 sm:grid-cols-3">
+        {/* Statistics */}
+        <div className="mb-6 grid grid-cols-1 gap-4 sm:grid-cols-3">
           {/* Videos */}
-          <div className="rounded-2xl border border-gray-200 bg-white p-5">
+          <div className="rounded-xl border border-purple-100 bg-white p-4 shadow-sm">
             <div className="flex items-center justify-between">
               <div>
                 <p className="text-sm text-gray-500">Total Videos</p>
 
-                <p className="mt-2 text-3xl font-bold text-gray-900">12</p>
+                <p className="mt-1 text-2xl font-bold text-gray-900">
+                  {totalVideos}
+                </p>
               </div>
 
-              <div className="flex h-12 w-12 items-center justify-center rounded-xl bg-purple-100 text-xl">
-                🎥
+              <div className="flex h-10 w-10 items-center justify-center rounded-lg bg-purple-100 text-purple-600">
+                <Video size={20} />
+              </div>
+            </div>
+          </div>
+
+          {/* Likes */}
+          <div className="rounded-xl border border-purple-100 bg-white p-4 shadow-sm">
+            <div className="flex items-center justify-between">
+              <div>
+                <p className="text-sm text-gray-500">Total Likes</p>
+
+                <p className="mt-1 text-2xl font-bold text-gray-900">
+                  {totalLikes}
+                </p>
+              </div>
+
+              <div className="flex h-10 w-10 items-center justify-center rounded-lg bg-purple-100 text-purple-600">
+                <Heart size={20} />
               </div>
             </div>
           </div>
 
           {/* Views */}
-          <div className="rounded-2xl border border-gray-200 bg-white p-5">
+          <div className="rounded-xl border border-purple-100 bg-white p-4 shadow-sm">
             <div className="flex items-center justify-between">
               <div>
                 <p className="text-sm text-gray-500">Total Views</p>
 
-                <p className="mt-2 text-3xl font-bold text-gray-900">8.4K</p>
+                <p className="mt-1 text-2xl font-bold text-gray-900">
+                  {totalViews}
+                </p>
               </div>
 
-              <div className="flex h-12 w-12 items-center justify-center rounded-xl bg-purple-100 text-xl">
-                👁️
-              </div>
-            </div>
-          </div>
-
-          {/* Followers */}
-          <div className="rounded-2xl border border-gray-200 bg-white p-5">
-            <div className="flex items-center justify-between">
-              <div>
-                <p className="text-sm text-gray-500">Followers</p>
-
-                <p className="mt-2 text-3xl font-bold text-gray-900">1.2K</p>
-              </div>
-
-              <div className="flex h-12 w-12 items-center justify-center rounded-xl bg-purple-100 text-xl">
-                👥
+              <div className="flex h-10 w-10 items-center justify-center rounded-lg bg-purple-100 text-purple-600">
+                <Eye size={20} />
               </div>
             </div>
           </div>
         </div>
 
-        {/* ================= CONTENT ================= */}
-        <div className="mt-8 grid gap-8 lg:grid-cols-5">
-          {/* ================= UPLOAD SECTION ================= */}
-          <section className="lg:col-span-3">
-            <div className="rounded-2xl border border-gray-200 bg-white p-6 sm:p-8">
-              <div className="mb-6">
-                <h2 className="text-2xl font-bold text-gray-900">
-                  Upload Food Video
-                </h2>
-
-                <p className="mt-1 text-sm text-gray-500">
-                  Share your latest food creation with the community.
-                </p>
+        {/* Main Content */}
+        <div className="grid gap-6 lg:grid-cols-3">
+          {/* Upload Section */}
+          <div className="rounded-xl border border-purple-100 bg-white p-6 shadow-sm lg:col-span-2">
+            <div className="flex items-center gap-3">
+              <div className="flex h-9 w-9 items-center justify-center rounded-lg bg-purple-100 text-purple-600">
+                <Upload size={19} />
               </div>
 
-              <form onSubmit={handleSubmit} className="space-y-6">
-                {/* ================= VIDEO UPLOAD ================= */}
-                <div>
-                  <label className="mb-2 block text-sm font-medium text-gray-700">
-                    Food Video
-                  </label>
+              <div>
+                <h2 className="text-lg font-semibold text-gray-900">
+                  Upload Video
+                </h2>
 
-                  {!videoPreview ? (
-                    <label
-                      htmlFor="video"
-                      className="flex min-h-64 cursor-pointer flex-col items-center justify-center rounded-2xl border-2 border-dashed border-gray-300 bg-gray-50 px-6 text-center transition hover:border-purple-400 hover:bg-purple-50"
-                    >
-                      <div className="flex h-16 w-16 items-center justify-center rounded-full bg-purple-100 text-2xl">
-                        🎥
+                <p className="text-xs text-gray-500">
+                  Share your latest food creation.
+                </p>
+              </div>
+            </div>
+
+            <form onSubmit={handleSubmit} className="mt-5 space-y-4">
+              {/* Video */}
+              <div>
+                <label className="mb-2 block text-sm font-medium text-gray-700">
+                  Food Video
+                </label>
+
+                {!videoPreview ? (
+                  <label
+                    htmlFor="video"
+                    className="flex h-40 cursor-pointer items-center justify-center rounded-xl border-2 border-dashed border-purple-200 bg-purple-50/50 transition hover:border-purple-400 hover:bg-purple-50"
+                  >
+                    <div className="text-center">
+                      <div className="mx-auto flex h-11 w-11 items-center justify-center rounded-full bg-purple-100 text-purple-600">
+                        <Upload size={20} />
                       </div>
 
-                      <p className="mt-4 font-semibold text-gray-700">
-                        Click to upload your video
-                      </p>
-
-                      <p className="mt-2 text-sm text-gray-500">
-                        MP4, WebM or MOV
+                      <p className="mt-3 text-sm font-medium text-gray-700">
+                        Click to select video
                       </p>
 
                       <p className="mt-1 text-xs text-gray-400">
-                        Choose a video from your device
+                        MP4, WebM or MOV
                       </p>
+                    </div>
 
-                      <input
-                        id="video"
-                        type="file"
-                        name="video"
-                        accept="video/*"
-                        onChange={handleVideoChange}
-                        className="hidden"
-                        required
-                      />
-                    </label>
-                  ) : (
-                    <div className="overflow-hidden rounded-2xl border border-gray-200 bg-black">
+                    <input
+                      id="video"
+                      type="file"
+                      accept="video/*"
+                      onChange={handleVideoChange}
+                      className="hidden"
+                    />
+                  </label>
+                ) : (
+                  <div className="overflow-hidden rounded-xl border border-purple-100">
+                    <div className="relative bg-black">
                       <video
                         src={videoPreview}
                         controls
-                        className="max-h-[450px] w-full object-contain"
+                        className="max-h-72 w-full"
                       />
+                    </div>
 
-                      <div className="flex items-center justify-between bg-white px-4 py-3">
+                    <div className="flex items-center justify-between p-3">
+                      <div className="flex min-w-0 items-center gap-2">
+                        <Play size={16} className="shrink-0 text-purple-600" />
+
                         <p className="truncate text-sm text-gray-600">
                           {video?.name}
                         </p>
-
-                        <button
-                          type="button"
-                          onClick={() => {
-                            setVideo(null);
-                            setVideoPreview("");
-                          }}
-                          className="ml-4 text-sm font-medium text-red-500 hover:text-red-600"
-                        >
-                          Remove
-                        </button>
                       </div>
+
+                      <button
+                        type="button"
+                        onClick={() => {
+                          setVideo(null);
+                          setVideoPreview("");
+                        }}
+                        className="flex items-center gap-1 text-sm text-red-500 hover:text-red-600"
+                      >
+                        <X size={15} />
+                        Remove
+                      </button>
                     </div>
-                  )}
-                </div>
-
-                {/* ================= FOOD NAME ================= */}
-                <div>
-                  <label
-                    htmlFor="name"
-                    className="mb-2 block text-sm font-medium text-gray-700"
-                  >
-                    Food Name
-                  </label>
-
-                  <input
-                    id="name"
-                    name="name"
-                    type="text"
-                    value={formData.name}
-                    onChange={handleChange}
-                    placeholder="e.g. Creamy White Pasta"
-                    required
-                    className="w-full rounded-xl border border-gray-300 px-4 py-3 outline-none transition placeholder:text-gray-400 focus:border-purple-500 focus:ring-2 focus:ring-purple-100"
-                  />
-                </div>
-
-                {/* ================= DESCRIPTION ================= */}
-                <div>
-                  <label
-                    htmlFor="description"
-                    className="mb-2 block text-sm font-medium text-gray-700"
-                  >
-                    Food Description
-                  </label>
-
-                  <textarea
-                    id="description"
-                    name="description"
-                    rows="5"
-                    value={formData.description}
-                    onChange={handleChange}
-                    placeholder="Tell people about your food, recipe or cooking process..."
-                    required
-                    className="w-full resize-none rounded-xl border border-gray-300 px-4 py-3 outline-none transition placeholder:text-gray-400 focus:border-purple-500 focus:ring-2 focus:ring-purple-100"
-                  />
-
-                  <p className="mt-2 text-xs text-gray-400">
-                    Write a short description about your food.
-                  </p>
-                </div>
-
-                {/* ================= SUBMIT ================= */}
-                <button
-                  type="submit"
-                  className="w-full rounded-xl bg-purple-600 py-3.5 font-semibold text-white transition hover:bg-purple-700 focus:outline-none focus:ring-4 focus:ring-purple-100"
-                >
-                  Upload Food Video
-                </button>
-              </form>
-            </div>
-          </section>
-
-          {/* ================= RECENT POSTS ================= */}
-          <section className="lg:col-span-2">
-            <div className="rounded-2xl border border-gray-200 bg-white p-6">
-              <div className="flex items-center justify-between">
-                <div>
-                  <h2 className="text-xl font-bold text-gray-900">
-                    Recent Uploads
-                  </h2>
-
-                  <p className="mt-1 text-sm text-gray-500">
-                    Your latest food videos
-                  </p>
-                </div>
-
-                <Link
-                  to="/feed"
-                  className="text-sm font-medium text-purple-600 hover:text-purple-700"
-                >
-                  View Feed
-                </Link>
+                  </div>
+                )}
               </div>
 
-              {/* Posts */}
-              <div className="mt-6 space-y-4">
-                {recentPosts.map((post) => (
+              {/* Food Name */}
+              <div>
+                <label className="mb-2 block text-sm font-medium text-gray-700">
+                  Food Name
+                </label>
+
+                <input
+                  type="text"
+                  name="name"
+                  value={formData.name}
+                  onChange={handleChange}
+                  placeholder="e.g. White Sauce Pasta"
+                  required
+                  className="w-full rounded-lg border border-gray-200 px-4 py-2.5 text-sm outline-none transition focus:border-purple-500 focus:ring-2 focus:ring-purple-100"
+                />
+              </div>
+
+              {/* Description */}
+              <div>
+                <label className="mb-2 block text-sm font-medium text-gray-700">
+                  Description
+                </label>
+
+                <textarea
+                  name="description"
+                  rows="3"
+                  value={formData.description}
+                  onChange={handleChange}
+                  placeholder="Write something about your food..."
+                  required
+                  className="w-full resize-none rounded-lg border border-gray-200 px-4 py-2.5 text-sm outline-none transition focus:border-purple-500 focus:ring-2 focus:ring-purple-100"
+                />
+              </div>
+
+              {/* Button */}
+              <button
+                type="submit"
+                className="flex items-center justify-center gap-2 rounded-lg bg-purple-600 px-5 py-2.5 text-sm font-medium text-white transition hover:bg-purple-700"
+              >
+                <Upload size={17} />
+                Upload Video
+              </button>
+            </form>
+          </div>
+
+          {/* Recent Uploads */}
+          <div className="rounded-xl border border-purple-100 bg-white p-6 shadow-sm">
+            <div className="flex items-center justify-between">
+              <h2 className="text-lg font-semibold text-gray-900">
+                Recent Uploads
+              </h2>
+
+              <Link
+                to="/feeds"
+                className="flex items-center gap-1 text-sm font-medium text-purple-600 hover:text-purple-700"
+              >
+                View Feed
+                <ArrowRight size={15} />
+              </Link>
+            </div>
+
+            <div className="mt-5 space-y-3">
+              {recentPosts.length === 0 ? (
+                <div className="py-8 text-center">
+                  <Video size={28} className="mx-auto text-purple-300" />
+
+                  <p className="mt-2 text-sm text-gray-500">
+                    No videos uploaded yet.
+                  </p>
+                </div>
+              ) : (
+                recentPosts.slice(0, 5).map((post) => (
                   <div
                     key={post._id}
-                    className="rounded-xl border border-gray-100 p-4 transition hover:border-purple-200 hover:bg-purple-50/30"
+                    className="border-b border-gray-100 pb-3 last:border-0"
                   >
-                    <div className="flex items-start justify-between gap-4">
+                    <div className="flex items-center justify-between gap-3">
                       <div className="min-w-0">
-                        <h3 className="truncate font-semibold text-gray-900">
+                        <p className="truncate text-sm font-medium text-gray-900">
                           {post.name}
-                        </h3>
+                        </p>
 
-                        <p className="mt-1 line-clamp-2 text-sm text-gray-500">
+                        <p className="mt-1 truncate text-xs text-gray-500">
                           {post.description}
                         </p>
                       </div>
 
-                      <span className="shrink-0 rounded-full bg-green-50 px-2.5 py-1 text-xs font-medium text-green-600">
-                        Published
-                      </span>
-                    </div>
-
-                    <div className="mt-3 flex items-center gap-4 text-xs text-gray-400">
-                      <span>👁️ {post.views} views</span>
-                      <span>{post.date}</span>
+                      <div className="flex shrink-0 items-center gap-1 text-xs text-gray-500">
+                        <Heart size={13} className="text-purple-500" />
+                        {post.likecount || 0}
+                      </div>
                     </div>
                   </div>
-                ))}
-              </div>
+                ))
+              )}
             </div>
-
-            {/* Creator Tip */}
-            <div className="mt-6 rounded-2xl bg-purple-600 p-6 text-white">
-              <div className="text-2xl">💡</div>
-
-              <h3 className="mt-3 font-bold">Creator Tip</h3>
-
-              <p className="mt-2 text-sm leading-6 text-purple-100">
-                Keep your videos clear and engaging. A good food video can help
-                more people discover your content.
-              </p>
-            </div>
-          </section>
+          </div>
         </div>
       </main>
     </div>

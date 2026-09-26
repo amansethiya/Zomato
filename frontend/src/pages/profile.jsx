@@ -31,7 +31,7 @@ const CreatorProfile = () => {
         );
 
         setProfile(response.data.creator);
-        setVideos(response.data.foodVideos || []);
+        setVideos(response.data.creator.foodVideos || []);
       } catch (error) {
         console.error("Error fetching creator profile:", error);
 
@@ -119,20 +119,13 @@ const CreatorProfile = () => {
             </h2>
 
             <p className="mt-2 text-sm text-gray-500">{error}</p>
-            <div className="flex gap-1 justify-center">
-              <Link
-                to="/feeds"
-                className="mt-6 inline-block rounded-xl bg-purple-600 px-6 py-3 text-sm font-semibold text-white transition hover:bg-purple-700"
-              >
-                Back to Feed
-              </Link>
-              <Link
-                to="/creator/login"
-                className="mt-6 inline-block rounded-xl bg-purple-600 px-6 py-3 text-sm font-semibold text-white transition hover:bg-purple-700"
-              >
-                Let's Login
-              </Link>
-            </div>
+
+            <Link
+              to="/feeds"
+              className="mt-6 inline-block rounded-xl bg-purple-600 px-6 py-3 text-sm font-semibold text-white transition hover:bg-purple-700"
+            >
+              Back to Feed
+            </Link>
           </div>
         </main>
       </div>
