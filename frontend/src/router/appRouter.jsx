@@ -20,7 +20,7 @@ const appRouter = () => {
           <Route path="/user/login" element={<UserLogin />} />
           <Route path="/creator/register" element={<CreatorRegister />} />
           <Route path="/creator/login" element={<CreatorLogin />} />
-          <Route path="/CreatorDashboard" element={<CreatorDashboard />} />
+          <Route path="/CreatorDashboard/" element={<CreatorDashboard />} />
           <Route path="/feeds" element={<Feeds />} />
           <Route path="/creator/:id" element={<Profile />} />
         </Routes>

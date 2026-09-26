@@ -5,9 +5,14 @@ import { Video, Heart, Eye, Upload, X, Play, ArrowRight } from "lucide-react";
 import Navbar from "../components/navbar";
 
 const CreatorDashboard = () => {
-  const { id } = useParams();
   const [video, setVideo] = useState(null);
   const [videoPreview, setVideoPreview] = useState("");
+
+  const [error, setError] = useState("");
+  // setError("");
+  //     setError(
+  //       error.response?.data?.message || "Unable to load creator profile.",
+  //     );
 
   const [formData, setFormData] = useState({
     name: "",
@@ -19,7 +24,7 @@ const CreatorDashboard = () => {
   // Get videos
   const fetchVideos = async () => {
     try {
-      const response = await axios.get("http://localhost:3000/foodvideo/", {
+      const response = await axios.get("http://localhost:3000/foodVideo", {
         withCredentials: true,
       });
 
@@ -100,6 +105,31 @@ const CreatorDashboard = () => {
     (sum, post) => sum + (post.views || 0),
     0,
   );
+
+  if (error) {
+    return (
+      <div className="min-h-screen bg-gray-50">
+        <Navbar />
+
+        <main className="flex min-h-[70vh] items-center justify-center px-4">
+          <div className="w-full max-w-md rounded-2xl border border-gray-200 bg-white p-8 text-center shadow-sm">
+            <h2 className="text-xl font-bold text-gray-900">
+              Unable to load Dashboard
+            </h2>
+
+            <p className="mt-2 text-sm text-gray-500">{error}</p>
+
+            <Link
+              to="/creator/login"
+              className="mt-6 inline-block rounded-xl bg-purple-600 px-6 py-3 text-sm font-semibold text-white transition hover:bg-purple-700"
+            >
+              Login Now
+            </Link>
+          </div>
+        </main>
+      </div>
+    );
+  }
 
   return (
     <div className="min-h-screen bg-purple-50/30">
