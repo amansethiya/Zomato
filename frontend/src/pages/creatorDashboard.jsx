@@ -9,10 +9,6 @@ const CreatorDashboard = () => {
   const [videoPreview, setVideoPreview] = useState("");
 
   const [error, setError] = useState("");
-  // setError("");
-  //     setError(
-  //       error.response?.data?.message || "Unable to load creator profile.",
-  //     );
 
   const [formData, setFormData] = useState({
     name: "",
@@ -23,14 +19,18 @@ const CreatorDashboard = () => {
 
   // Get videos
   const fetchVideos = async () => {
+    setError("");
     try {
-      const response = await axios.get("http://localhost:3000/foodVideo", {
+      const response = await axios.get("http://localhost:3000/foodvideo", {
         withCredentials: true,
       });
 
       setRecentPosts(response.data.foodVideos || []);
     } catch (error) {
       console.error(error);
+      setError(
+        error.response?.data?.message || "Unable to load creator profile.",
+      );
     }
   };
 

@@ -60,7 +60,7 @@ const Feed = () => {
   const handleLike = async (videoId) => {
     try {
       const response = await axios.post(
-        `http://localhost:3000/foodvideo/${videoId}/like`,
+        `localhost:3000/foodvideo/like`,
         {},
         {
           withCredentials: true,
