@@ -62,6 +62,7 @@ const Feed = () => {
       const response = await axios.post(
         `localhost:3000/foodvideo/like`,
         {},
+
         {
           withCredentials: true,
         },
