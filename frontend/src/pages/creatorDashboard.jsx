@@ -19,7 +19,7 @@ const CreatorDashboard = () => {
 
   // Get videos
   const fetchVideos = async () => {
-    setError("");
+    // setError("");
     try {
       const response = await axios.get("http://localhost:3000/foodvideo", {
         withCredentials: true,
@@ -28,9 +28,9 @@ const CreatorDashboard = () => {
       setRecentPosts(response.data.foodVideos || []);
     } catch (error) {
       console.error(error);
-      setError(
-        error.response?.data?.message || "Unable to load creator profile.",
-      );
+      // setError(
+      //   error.response?.data?.message || "Unable to load creator profile.",
+      // );
     }
   };
 
