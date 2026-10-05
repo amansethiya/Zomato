@@ -5,6 +5,7 @@ import {
 } from "../middleware/auth.middleware.js";
 import {
   addFoodVideoController,
+  checkCreatorController,
   getFoodVideoController,
   likeController,
   saveController,
@@ -23,6 +24,9 @@ router.post(
   upload.single("video"),
   addFoodVideoController,
 );
+
+router.get("/checkCreator", authcreatorMiddleware, checkCreatorController);
+
 router.get("/", authUserMiddleware, getFoodVideoController);
 
 router.post("/like", authUserMiddleware, likeController);

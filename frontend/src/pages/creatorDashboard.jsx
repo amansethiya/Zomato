@@ -7,9 +7,7 @@ import Navbar from "../components/navbar";
 const CreatorDashboard = () => {
   const [video, setVideo] = useState(null);
   const [videoPreview, setVideoPreview] = useState("");
-
   const [error, setError] = useState("");
-
   const [formData, setFormData] = useState({
     name: "",
     description: "",
@@ -17,9 +15,29 @@ const CreatorDashboard = () => {
 
   const [recentPosts, setRecentPosts] = useState([]);
 
+  //check creator
+  const checkCreator = async () => {
+    try {
+      setError("");
+      const response = await axios.get(
+        "http://localhost:3000/foodvideo/checkCreator",
+        {
+          withCredentials: true,
+        },
+      );
+    } catch (error) {
+      console.error(error);
+      setError(
+        error.response?.data?.message || "Unable to load creator profile.",
+      );
+    }
+  };
+  useEffect(() => {
+    checkCreator();
+  }, []);
+
   // Get videos
   const fetchVideos = async () => {
-    // setError("");
     try {
       const response = await axios.get("http://localhost:3000/foodvideo", {
         withCredentials: true,
@@ -28,9 +46,6 @@ const CreatorDashboard = () => {
       setRecentPosts(response.data.foodVideos || []);
     } catch (error) {
       console.error(error);
-      // setError(
-      //   error.response?.data?.message || "Unable to load creator profile.",
-      // );
     }
   };
 

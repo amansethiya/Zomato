@@ -61,7 +61,10 @@ const Feed = () => {
     try {
       const response = await axios.post(
         `localhost:3000/foodvideo/like`,
-        {},
+        {
+          foodId: videoId,
+          user: userId, // only if your backend requires it
+        },
 
         {
           withCredentials: true,

@@ -21,6 +21,8 @@ export async function addFoodVideoController(req, res) {
   });
 }
 
+export async function checkCreatorController() {}
+
 export async function getFoodVideoController(req, res) {
   const foodVideos = await foodVideoModel
     .find({})
