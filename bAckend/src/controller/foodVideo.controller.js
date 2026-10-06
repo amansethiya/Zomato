@@ -102,3 +102,19 @@ export async function saveController(req, res) {
     save,
   });
 }
+
+export async function myVideosController(req, res) {
+  const creator = req.creator._id;
+  if (!creator) {
+    return res.status(401).json({
+      message: "please login first to fatch videos",
+    });
+  }
+  const creatorVideos = await foodVideoModel.find({ creator: req.creator._id });
+
+  res.status(200).json({
+    message: "videos of creator: ",
+    creator,
+    creatorVideos: creatorVideos,
+  });
+}

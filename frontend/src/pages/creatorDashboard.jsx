@@ -15,37 +15,23 @@ const CreatorDashboard = () => {
 
   const [recentPosts, setRecentPosts] = useState([]);
 
-  //check creator
-  const checkCreator = async () => {
+  // Get videos
+  const fetchVideos = async () => {
     try {
       setError("");
       const response = await axios.get(
-        "http://localhost:3000/foodvideo/checkCreator",
+        "http://localhost:3000/foodvideo/myVideos",
         {
           withCredentials: true,
         },
       );
+      console.log(response.data.creatorVideos);
+      setRecentPosts(response.data.creatorVideos || []);
     } catch (error) {
       console.error(error);
       setError(
         error.response?.data?.message || "Unable to load creator profile.",
       );
-    }
-  };
-  useEffect(() => {
-    checkCreator();
-  }, []);
-
-  // Get videos
-  const fetchVideos = async () => {
-    try {
-      const response = await axios.get("http://localhost:3000/foodvideo", {
-        withCredentials: true,
-      });
-
-      setRecentPosts(response.data.foodVideos || []);
-    } catch (error) {
-      console.error(error);
     }
   };
 

@@ -60,15 +60,15 @@ const Feed = () => {
   const handleLike = async (videoId) => {
     try {
       const response = await axios.post(
-        `localhost:3000/foodvideo/like`,
+        `http://localhost:3000/foodvideo/like`,
         {
           foodId: videoId,
-          user: userId, // only if your backend requires it
         },
 
         {
           withCredentials: true,
         },
+        alert("video liked"),
       );
 
       setVideos((previousVideos) =>
@@ -366,10 +366,10 @@ const Feed = () => {
                         <Heart
                           size={19}
                           strokeWidth={2}
-                          fill={item.liked ? "currentColor" : "none"}
+                          fill={item.liked ? "red-500" : "none"}
                         />
 
-                        <span>{item.likesCount || 0}</span>
+                        <span>{item.likecount || 0}</span>
                       </button>
 
                       {/* Save */}
