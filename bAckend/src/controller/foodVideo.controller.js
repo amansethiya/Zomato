@@ -48,12 +48,17 @@ export async function likeController(req, res) {
       food: foodId,
     });
 
-    await foodVideoModel.findByIdAndUpdate(foodId, {
-      $inc: { likecount: -1 },
-    });
+    await foodVideoModel.findByIdAndUpdate(
+      foodId,
+      {
+        $inc: { likecount: -1 },
+      },
+      { new: true },
+    );
 
     return res.status(200).json({
       message: "extra like deleted",
+      liked: false,
     });
   }
 
@@ -62,12 +67,17 @@ export async function likeController(req, res) {
     food: foodId,
   });
 
-  await foodVideoModel.findByIdAndUpdate(foodId, {
-    $inc: { likecount: 1 },
-  });
+  await foodVideoModel.findByIdAndUpdate(
+    foodId,
+    {
+      $inc: { likecount: 1 },
+    },
+    { new: true },
+  );
 
   res.status(201).json({
     message: "food liked by someone",
+    liked: true,
     like,
   });
 }

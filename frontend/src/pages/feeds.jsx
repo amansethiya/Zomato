@@ -77,7 +77,7 @@ const Feed = () => {
             ? {
                 ...item,
                 liked: response.data.liked,
-                likesCount: response.data.likesCount,
+                likescount: response.data.likescount,
               }
             : item,
         ),
@@ -357,16 +357,17 @@ const Feed = () => {
                       {/* Like */}
                       <button
                         onClick={() => handleLike(item._id)}
-                        className={`flex items-center gap-2 rounded-lg px-3 py-2 text-sm font-medium transition ${
-                          item.liked
-                            ? "bg-red-50 text-red-500"
-                            : "text-gray-600 hover:bg-gray-50 hover:text-red-500"
-                        }`}
+                        className={`flex items-center gap-2 rounded-lg 
+                          px-3 py-2 text-sm font-medium transition ${
+                            item.liked
+                              ? "bg-red-50 text-red-500"
+                              : "text-gray-600 hover:bg-gray-50 hover:text-red-500"
+                          }`}
                       >
                         <Heart
                           size={19}
                           strokeWidth={2}
-                          fill={item.liked ? "red-500" : "none"}
+                          fill={item.liked ? "text-red-500" : "none"}
                         />
 
                         <span>{item.likecount || 0}</span>
