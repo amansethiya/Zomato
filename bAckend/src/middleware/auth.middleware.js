@@ -36,7 +36,7 @@ export async function authUserMiddleware(req, res, next) {
 
       if (user) {
         req.user = user;
-        req.authType = "user";
+        req.authType = user;
 
         return next();
       }
@@ -54,7 +54,7 @@ export async function authUserMiddleware(req, res, next) {
 
       if (creator) {
         req.creator = creator;
-        req.authType = "creator";
+        req.authType = creator;
 
         return next();
       }

@@ -2,9 +2,12 @@ import React, { useState } from "react";
 import "../../index.css";
 import { Link, useNavigate } from "react-router-dom";
 import axios from "axios";
+import { AlertCircle, RefreshCw, LogIn } from "lucide-react";
 
 const CreatorLogin = () => {
   const navigate = useNavigate();
+
+  const [error, setError] = useState("");
 
   const [showPassword, setShowPassword] = useState(false);
 
@@ -24,15 +27,53 @@ const CreatorLogin = () => {
     e.preventDefault();
 
     try {
-      await axios.post("http://localhost:3000/auth/creator/login", formData, {
-        withCredentials: true,
-      });
+      setError("");
+      const response = await axios.post(
+        "http://localhost:3000/auth/creator/login",
+        formData,
+        {
+          withCredentials: true,
+        },
+      );
 
       navigate("/creatorDashboard");
     } catch (err) {
       console.log(err);
+      setError(error.response?.data?.message || "Check eMail or Password.");
     }
   };
+
+  if (error) {
+    return (
+      <div className="min-h-screen bg-gray-50">
+        <main className="flex min-h-[70vh] items-center justify-center px-4">
+          <div className="w-full max-w-md rounded-2xl border border-gray-200 bg-white p-8 text-center shadow-sm">
+            {/* Error Icon */}
+            <div className="mx-auto flex h-14 w-14 items-center justify-center rounded-full bg-purple-600 text-white">
+              <AlertCircle size={28} />
+            </div>
+
+            <h2 className="mt-4 text-xl font-bold text-gray-900">
+              Unable to login Creator
+            </h2>
+
+            <p className="mt-2 text-sm text-gray-500">{error}</p>
+
+            <div className="mt-6 flex justify-center gap-3">
+              {/* Try Again */}
+              <button
+                onClick={() => window.location.reload()}
+                className="flex items-center gap-2 rounded-lg bg-purple-600 px-5 py-2.5 text-sm font-semibold text-white transition hover:bg-purple-500"
+              >
+                <RefreshCw size={16} />
+                Try Again
+              </button>
+            </div>
+          </div>
+        </main>
+      </div>
+    );
+  }
 
   return (
     <div className="min-h-screen bg-purple-50 px-4 py-10">

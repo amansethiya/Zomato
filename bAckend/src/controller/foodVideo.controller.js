@@ -35,7 +35,7 @@ export async function getFoodVideoController(req, res) {
 
 export async function likeController(req, res) {
   const { foodId } = req.body;
-  const userId = req.user;
+  const userId = req.authType;
 
   const isAlreadyLiked = await likeModel.findOne({
     user: userId,
