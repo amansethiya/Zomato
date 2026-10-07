@@ -12,9 +12,15 @@ const likeSchema = new mongoose.Schema(
       ref: "foodVideo",
       required: true,
     },
+    liked: {
+      type: Boolean,
+      default: true,
+    },
   },
   { timestamps: true },
 );
+
+likeSchema.index({ user: 1, food: 1 }, { unique: true });
 
 const likeModel = mongoose.model("likes", likeSchema);
 

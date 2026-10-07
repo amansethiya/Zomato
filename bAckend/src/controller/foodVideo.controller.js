@@ -24,13 +24,39 @@ export async function addFoodVideoController(req, res) {
 export async function checkCreatorController() {}
 
 export async function getFoodVideoController(req, res) {
-  const foodVideos = await foodVideoModel
-    .find({})
-    .populate("creator", "creatorusername");
-  res.status(200).json({
-    message: "wow! i have found a food videos for you.",
-    foodVideos,
-  });
+  try {
+    const userId = req.authType;
+
+    const foodVideos = await foodVideoModel
+      .find({})
+      .populate("creator", "creatorusername")
+      .lean();
+
+    const videosWithLikeStatus = await Promise.all(
+      foodVideos.map(async (video) => {
+        const isLiked = await likeModel.findOne({
+          user: userId,
+          food: video._id,
+        });
+
+        return {
+          ...video,
+          liked: !!isLiked,
+        };
+      }),
+    );
+
+    res.status(200).json({
+      message: "wow! i have found food videos for you.",
+      foodVideos: videosWithLikeStatus,
+    });
+  } catch (error) {
+    console.error("Get food videos error:", error);
+
+    res.status(500).json({
+      message: "Unable to fetch food videos",
+    });
+  }
 }
 
 export async function likeController(req, res) {
@@ -48,17 +74,20 @@ export async function likeController(req, res) {
       food: foodId,
     });
 
-    await foodVideoModel.findByIdAndUpdate(
+    const updatedVideo = await foodVideoModel.findByIdAndUpdate(
       foodId,
       {
         $inc: { likecount: -1 },
       },
-      { new: true },
+      {
+        returnDocument: "after",
+      },
     );
 
     return res.status(200).json({
       message: "extra like deleted",
       liked: false,
+      likecount: updatedVideo.likecount,
     });
   }
 
@@ -67,18 +96,20 @@ export async function likeController(req, res) {
     food: foodId,
   });
 
-  await foodVideoModel.findByIdAndUpdate(
+  const updatedVideo = await foodVideoModel.findByIdAndUpdate(
     foodId,
     {
       $inc: { likecount: 1 },
     },
-    { new: true },
+    {
+      returnDocument: "after",
+    },
   );
 
   res.status(201).json({
     message: "food liked by someone",
     liked: true,
-    like,
+    likecount: updatedVideo.likecount,
   });
 }
 

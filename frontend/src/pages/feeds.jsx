@@ -68,7 +68,6 @@ const Feed = () => {
         {
           withCredentials: true,
         },
-        alert("video liked"),
       );
 
       setVideos((previousVideos) =>
@@ -77,7 +76,8 @@ const Feed = () => {
             ? {
                 ...item,
                 liked: response.data.liked,
-                likescount: response.data.likescount,
+
+                likecount: response.data.likecount,
               }
             : item,
         ),
@@ -357,20 +357,20 @@ const Feed = () => {
                       {/* Like */}
                       <button
                         onClick={() => handleLike(item._id)}
-                        className={`flex items-center gap-2 rounded-lg 
+                        className={`cursor-pointer flex items-center gap-2 rounded-lg 
                           px-3 py-2 text-sm font-medium transition ${
                             item.liked
-                              ? "bg-red-50 text-red-500"
+                              ? " text-red-500"
                               : "text-gray-600 hover:bg-gray-50 hover:text-red-500"
                           }`}
                       >
                         <Heart
                           size={19}
                           strokeWidth={2}
-                          fill={item.liked ? "text-red-500" : "none"}
+                          fill={item.liked ? "#ff0000" : "#fff"}
                         />
 
-                        <span>{item.likecount || 0}</span>
+                        <span>{item.likecount}</span>
                       </button>
 
                       {/* Save */}
