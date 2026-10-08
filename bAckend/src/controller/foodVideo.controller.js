@@ -29,12 +29,17 @@ export async function getFoodVideoController(req, res) {
 
     const foodVideos = await foodVideoModel
       .find({})
+      .sort({ _id: -1 })
       .populate("creator", "creatorusername")
       .lean();
 
-    const videosWithLikeStatus = await Promise.all(
+    const videosWithLikeSavedStatus = await Promise.all(
       foodVideos.map(async (video) => {
         const isLiked = await likeModel.findOne({
+          user: userId,
+          food: video._id,
+        });
+        const isSaved = await saveModel.findOne({
           user: userId,
           food: video._id,
         });
@@ -42,13 +47,14 @@ export async function getFoodVideoController(req, res) {
         return {
           ...video,
           liked: !!isLiked,
+          saved: !!isSaved,
         };
       }),
     );
 
     res.status(200).json({
       message: "wow! i have found food videos for you.",
-      foodVideos: videosWithLikeStatus,
+      foodVideos: videosWithLikeSavedStatus,
     });
   } catch (error) {
     console.error("Get food videos error:", error);
@@ -115,33 +121,88 @@ export async function likeController(req, res) {
 
 export async function saveController(req, res) {
   const { foodId } = req.body;
-  const user = req.user._id;
+  const userId = req.authType;
 
   const isAlreadySaved = await saveModel.findOne({
-    user: user._id,
+    user: userId,
     food: foodId,
   });
 
   if (isAlreadySaved) {
     await saveModel.deleteOne({
-      user: user._id,
+      user: userId,
       food: foodId,
     });
 
-    res.status(200).json({
-      message: "extra saved deleted",
+    return res.status(200).json({
+      message: "extra save deleted",
+      saved: false,
     });
   }
 
   const save = await saveModel.create({
-    user: req.user._id,
+    user: userId,
     food: foodId,
   });
 
   res.status(201).json({
-    message: "food saved by someone",
-    save,
+    message: "food vid saved by someone",
+    saved: true,
+    save: save,
   });
+}
+
+export async function getSaveController(req, res) {
+  try {
+    const userId = req.authType;
+
+    if (!userId) {
+      return res.status(401).json({
+        message: "please login to get saved videos",
+      });
+    }
+
+    const savedVideos = await saveModel
+      .find({ user: userId })
+      .sort({ createdAt: -1 })
+      .populate({
+        path: "food",
+        populate: {
+          path: "creator",
+          select: "creatorusername",
+        },
+      })
+      .lean();
+
+    const foodVideos = await Promise.all(
+      savedVideos
+        .map((item) => item.food)
+        .filter(Boolean)
+        .map(async (video) => {
+          const isLiked = await likeModel.findOne({
+            user: userId,
+            food: video._id,
+          });
+
+          return {
+            ...video,
+            saved: true,
+            liked: !!isLiked,
+          };
+        }),
+    );
+
+    res.status(200).json({
+      message: "saved videos found",
+      foodVideos,
+    });
+  } catch (error) {
+    console.error("Get saved videos error:", error);
+
+    res.status(500).json({
+      message: "Unable to fetch saved videos",
+    });
+  }
 }
 
 export async function myVideosController(req, res) {
@@ -151,7 +212,9 @@ export async function myVideosController(req, res) {
       message: "please login first to fatch videos",
     });
   }
-  const creatorVideos = await foodVideoModel.find({ creator: req.creator._id });
+  const creatorVideos = await foodVideoModel
+    .find({ creator: req.creator._id })
+    .sort({ _id: -1 });
 
   res.status(200).json({
     message: "videos of creator: ",

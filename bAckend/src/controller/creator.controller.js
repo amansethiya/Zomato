@@ -5,7 +5,9 @@ export async function profileController(req, res) {
   const creatorId = req.params.id;
 
   const creator = await creatorModel.findById(creatorId);
-  const creatorFoodVideo = await foodVideoModel.find({ creator: creatorId });
+  const creatorFoodVideo = await foodVideoModel
+    .find({ creator: creatorId })
+    .sort({ _id: -1 });
 
   if (!creator) {
     return res.status(404).json({

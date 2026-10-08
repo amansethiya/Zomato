@@ -1,64 +1,110 @@
 import React from "react";
 import "../index.css";
 import { Link } from "react-router-dom";
+import {
+  ArrowRight,
+  Play,
+  Heart,
+  Bookmark,
+  Users,
+  ChefHat,
+  Sparkles,
+  Utensils,
+  Video,
+  Upload,
+  Search,
+} from "lucide-react";
+
 import Navbar from "../components/navbar";
 
 const Home = () => {
   return (
     <div className="min-h-screen bg-white text-gray-900">
-      {/* Navbar */}
       <Navbar />
 
       {/* Hero Section */}
       <section className="bg-orange-50">
-        <div className="mx-auto grid max-w-7xl items-center gap-12 px-6 py-20 md:grid-cols-2 lg:py-28">
+        <div className="mx-auto grid max-w-7xl items-center gap-12 px-6 py-16 md:grid-cols-2 lg:py-24">
           {/* Hero Content */}
           <div>
-            <span className="inline-block rounded-full bg-orange-100 px-4 py-2 text-sm font-medium text-orange-600">
-              🍴 Food • Community • Creativity
-            </span>
+            <div className="inline-flex items-center gap-2 rounded-full bg-white px-4 py-2 text-sm font-medium text-orange-600 shadow-sm">
+              <Utensils size={16} />
+              Food Community
+            </div>
 
-            <h1 className="mt-6 text-4xl font-bold leading-tight sm:text-5xl lg:text-6xl">
-              Discover.
-              <span className="text-orange-500"> Create.</span>
-              <br />
-              Share Food.
+            <h1 className="mt-6 text-4xl font-bold leading-tight sm:text-5xl">
+              Discover food.
+              <span className="block text-orange-500">Share your passion.</span>
             </h1>
 
             <p className="mt-6 max-w-xl text-lg leading-8 text-gray-600">
-              A community where food lovers and creators come together. Discover
-              amazing food videos, share your creations, and connect with people
-              who love food just like you.
+              FoodieHub is a place to discover food videos, find new creators,
+              save your favourite content, and share your own food creations.
             </p>
 
-            <div className="mt-8 flex flex-col gap-4 sm:flex-row">
+            <div className="mt-8 flex flex-col gap-3 sm:flex-row">
               <Link
-                to="/creatordashboard"
-                className="rounded-xl bg-orange-500 px-7 py-3 text-center font-semibold text-white transition hover:bg-orange-600"
+                to="/feeds"
+                className="inline-flex items-center justify-center gap-2 rounded-lg bg-orange-500 px-6 py-3 font-semibold text-white transition hover:bg-orange-600"
               >
-                Join the Community
+                <Play size={18} />
+                Explore Videos
               </Link>
 
               <Link
-                to="/feeds"
-                className="rounded-xl border border-gray-300 bg-white px-7 py-3 text-center font-semibold text-gray-700 transition hover:bg-gray-50"
+                to="/creator/register"
+                className="inline-flex items-center justify-center gap-2 rounded-lg border border-gray-300 bg-white px-6 py-3 font-semibold text-gray-700 transition hover:border-orange-300 hover:text-orange-600"
               >
-                Explore Videos
+                <ChefHat size={18} />
+                Become a Creator
               </Link>
             </div>
           </div>
 
-          {/* Hero Visual */}
+          {/* Hero Card */}
           <div className="flex justify-center">
-            <div className="relative h-80 w-full max-w-md overflow-hidden rounded-3xl bg-gradient-to-br from-orange-400 to-red-500 shadow-2xl">
-              <div className="absolute inset-0 flex flex-col items-center justify-center text-white">
-                <div className="text-7xl">🍕</div>
+            <div className="w-full max-w-md rounded-3xl bg-white p-5 shadow-lg">
+              <div className="relative overflow-hidden rounded-2xl bg-orange-500">
+                <div className="flex h-80 flex-col items-center justify-center px-6 text-center text-white">
+                  <div className="flex h-20 w-20 items-center justify-center rounded-2xl bg-white/15">
+                    <Utensils size={42} />
+                  </div>
 
-                <h2 className="mt-5 text-2xl font-bold">Your Food Community</h2>
+                  <h2 className="mt-6 text-2xl font-bold">
+                    Welcome to FoodieHub
+                  </h2>
 
-                <p className="mt-2 text-center text-orange-100">
-                  Watch • Create • Share
-                </p>
+                  <p className="mt-2 max-w-xs text-sm leading-6 text-orange-100">
+                    Watch food videos, discover creators and share your
+                    favourite food moments.
+                  </p>
+
+                  <Link
+                    to="/feeds"
+                    className="mt-6 inline-flex items-center gap-2 rounded-lg bg-white px-5 py-2.5 text-sm font-semibold text-orange-600 transition hover:bg-orange-50"
+                  >
+                    Start Exploring
+                    <ArrowRight size={16} />
+                  </Link>
+                </div>
+              </div>
+
+              {/* Small action row */}
+              <div className="mt-4 grid grid-cols-3 gap-3">
+                <div className="flex flex-col items-center rounded-xl bg-gray-50 py-3">
+                  <Video size={20} className="text-orange-500" />
+                  <span className="mt-1 text-xs text-gray-500">Watch</span>
+                </div>
+
+                <div className="flex flex-col items-center rounded-xl bg-gray-50 py-3">
+                  <Heart size={20} className="text-orange-500" />
+                  <span className="mt-1 text-xs text-gray-500">Like</span>
+                </div>
+
+                <div className="flex flex-col items-center rounded-xl bg-gray-50 py-3">
+                  <Bookmark size={20} className="text-orange-500" />
+                  <span className="mt-1 text-xs text-gray-500">Save</span>
+                </div>
               </div>
             </div>
           </div>
@@ -69,59 +115,84 @@ const Home = () => {
       <section id="features" className="px-6 py-20">
         <div className="mx-auto max-w-7xl">
           <div className="mx-auto max-w-2xl text-center">
-            <p className="font-semibold text-orange-500">FEATURES</p>
+            <p className="text-sm font-semibold tracking-wide text-orange-500">
+              FEATURES
+            </p>
 
             <h2 className="mt-2 text-3xl font-bold sm:text-4xl">
-              Everything for food lovers
+              Everything in one place
             </h2>
 
             <p className="mt-4 text-gray-600">
-              A simple platform designed for discovering and sharing food
-              content.
+              Simple tools to help you discover, save and share food content.
             </p>
           </div>
 
           <div className="mt-12 grid gap-6 md:grid-cols-3">
-            {/* Card 1 */}
-            <div className="rounded-2xl border border-gray-200 p-7 transition hover:-translate-y-1 hover:shadow-lg">
-              <div className="flex h-14 w-14 items-center justify-center rounded-xl bg-orange-100 text-3xl">
-                🎥
+            {/* Feature 1 */}
+            <div className="rounded-2xl border border-gray-200 p-6 transition hover:border-orange-200 hover:shadow-md">
+              <div className="flex h-12 w-12 items-center justify-center rounded-xl bg-orange-100 text-orange-500">
+                <Video size={24} />
               </div>
 
               <h3 className="mt-5 text-xl font-bold">Watch Food Videos</h3>
 
               <p className="mt-3 leading-7 text-gray-600">
-                Discover recipes, cooking videos, food ideas and interesting
-                content from creators.
+                Explore cooking videos, recipes and food ideas shared by
+                creators.
               </p>
+
+              <Link
+                to="/feeds"
+                className="mt-5 inline-flex items-center gap-2 text-sm font-semibold text-orange-500 hover:text-orange-600"
+              >
+                Explore Videos
+                <ArrowRight size={16} />
+              </Link>
             </div>
 
-            {/* Card 2 */}
-            <div className="rounded-2xl border border-gray-200 p-7 transition hover:-translate-y-1 hover:shadow-lg">
-              <div className="flex h-14 w-14 items-center justify-center rounded-xl bg-orange-100 text-3xl">
-                👨‍🍳
+            {/* Feature 2 */}
+            <div className="rounded-2xl border border-gray-200 p-6 transition hover:border-orange-200 hover:shadow-md">
+              <div className="flex h-12 w-12 items-center justify-center rounded-xl bg-orange-100 text-orange-500">
+                <Upload size={24} />
               </div>
 
-              <h3 className="mt-5 text-xl font-bold">Become a Creator</h3>
+              <h3 className="mt-5 text-xl font-bold">Share Your Videos</h3>
 
               <p className="mt-3 leading-7 text-gray-600">
-                Share your own food videos and build your audience within the
-                community.
+                Upload your own food videos and share your cooking ideas with
+                the community.
               </p>
+
+              <Link
+                to="/creator/register"
+                className="mt-5 inline-flex items-center gap-2 text-sm font-semibold text-orange-500 hover:text-orange-600"
+              >
+                Become a Creator
+                <ArrowRight size={16} />
+              </Link>
             </div>
 
-            {/* Card 3 */}
-            <div className="rounded-2xl border border-gray-200 p-7 transition hover:-translate-y-1 hover:shadow-lg">
-              <div className="flex h-14 w-14 items-center justify-center rounded-xl bg-orange-100 text-3xl">
-                ❤️
+            {/* Feature 3 */}
+            <div className="rounded-2xl border border-gray-200 p-6 transition hover:border-orange-200 hover:shadow-md">
+              <div className="flex h-12 w-12 items-center justify-center rounded-xl bg-orange-100 text-orange-500">
+                <Bookmark size={24} />
               </div>
 
-              <h3 className="mt-5 text-xl font-bold">Connect & Discover</h3>
+              <h3 className="mt-5 text-xl font-bold">Like & Save</h3>
 
               <p className="mt-3 leading-7 text-gray-600">
-                Find new creators, discover different cuisines and enjoy food
-                content from the community.
+                Like videos you enjoy and save your favourite food content for
+                later.
               </p>
+
+              <Link
+                to="/feeds"
+                className="mt-5 inline-flex items-center gap-2 text-sm font-semibold text-orange-500 hover:text-orange-600"
+              >
+                Start Exploring
+                <ArrowRight size={16} />
+              </Link>
             </div>
           </div>
         </div>
@@ -131,49 +202,53 @@ const Home = () => {
       <section id="how-it-works" className="bg-gray-50 px-6 py-20">
         <div className="mx-auto max-w-7xl">
           <div className="text-center">
-            <p className="font-semibold text-orange-500">HOW IT WORKS</p>
+            <p className="text-sm font-semibold tracking-wide text-orange-500">
+              HOW IT WORKS
+            </p>
 
             <h2 className="mt-2 text-3xl font-bold sm:text-4xl">
-              Start in three simple steps
+              Get started in three steps
             </h2>
           </div>
 
-          <div className="mt-12 grid gap-8 md:grid-cols-3">
+          <div className="mt-12 grid gap-10 md:grid-cols-3">
+            {/* Step 1 */}
             <div className="text-center">
-              <div className="mx-auto flex h-16 w-16 items-center justify-center rounded-full bg-orange-500 text-xl font-bold text-white">
+              <div className="mx-auto flex h-14 w-14 items-center justify-center rounded-full bg-orange-500 font-bold text-white">
                 1
               </div>
 
               <h3 className="mt-5 text-xl font-bold">Create an Account</h3>
 
-              <p className="mt-3 text-gray-600">
-                Register as a food lover or creator and join the community.
+              <p className="mx-auto mt-3 max-w-sm leading-7 text-gray-600">
+                Register as a user or creator and become part of the FoodieHub
+                community.
               </p>
             </div>
 
+            {/* Step 2 */}
             <div className="text-center">
-              <div className="mx-auto flex h-16 w-16 items-center justify-center rounded-full bg-orange-500 text-xl font-bold text-white">
+              <div className="mx-auto flex h-14 w-14 items-center justify-center rounded-full bg-orange-500 font-bold text-white">
                 2
               </div>
 
-              <h3 className="mt-5 text-xl font-bold">Explore Content</h3>
+              <h3 className="mt-5 text-xl font-bold">Discover Food</h3>
 
-              <p className="mt-3 text-gray-600">
-                Watch videos and discover recipes and food content from
-                creators.
+              <p className="mx-auto mt-3 max-w-sm leading-7 text-gray-600">
+                Browse food videos and discover new creators and recipes.
               </p>
             </div>
 
+            {/* Step 3 */}
             <div className="text-center">
-              <div className="mx-auto flex h-16 w-16 items-center justify-center rounded-full bg-orange-500 text-xl font-bold text-white">
+              <div className="mx-auto flex h-14 w-14 items-center justify-center rounded-full bg-orange-500 font-bold text-white">
                 3
               </div>
 
-              <h3 className="mt-5 text-xl font-bold">Share Your Food</h3>
+              <h3 className="mt-5 text-xl font-bold">Share & Connect</h3>
 
-              <p className="mt-3 text-gray-600">
-                Creators can upload videos and share their food experiences with
-                everyone.
+              <p className="mx-auto mt-3 max-w-sm leading-7 text-gray-600">
+                Like, save and share content or upload your own food videos.
               </p>
             </div>
           </div>
@@ -181,34 +256,72 @@ const Home = () => {
       </section>
 
       {/* Creator CTA */}
+      {/* Join FoodieHub */}
       <section id="creators" className="px-6 py-20">
         <div className="mx-auto max-w-5xl rounded-3xl bg-orange-500 px-6 py-14 text-center text-white sm:px-12">
           <h2 className="text-3xl font-bold sm:text-4xl">
-            Have something delicious to share?
+            What brings you to FoodieHub?
           </h2>
 
-          <p className="mx-auto mt-4 max-w-2xl text-orange-100">
-            Join our creator community and share your recipes, cooking videos
-            and food experiences with others.
+          <p className="mx-auto mt-4 max-w-2xl leading-7 text-orange-100">
+            Discover amazing food videos or share your own creations with the
+            community.
           </p>
 
-          <Link
-            to="/creator/register"
-            className="mt-8 inline-block rounded-xl bg-white px-7 py-3 font-semibold text-orange-600 transition hover:bg-orange-50"
-          >
-            Become a Creator
-          </Link>
+          <div className="mt-8 flex flex-col justify-center gap-3 sm:flex-row">
+            {/* Viewer */}
+            <Link
+              to="/feeds"
+              className="inline-flex items-center justify-center gap-2 rounded-lg bg-white px-6 py-3 font-semibold text-orange-600 transition hover:bg-orange-50"
+            >
+              <Play size={18} />
+              Explore Food Videos
+            </Link>
+
+            {/* Creator */}
+            <Link
+              to="/creator/register"
+              className="inline-flex items-center justify-center gap-2 rounded-lg border border-white/70 px-6 py-3 font-semibold text-white transition hover:bg-white/10"
+            >
+              <ChefHat size={18} />
+              Become a Creator
+            </Link>
+          </div>
         </div>
       </section>
 
       {/* Footer */}
       <footer className="border-t border-gray-200">
         <div className="mx-auto flex max-w-7xl flex-col gap-4 px-6 py-8 sm:flex-row sm:items-center sm:justify-between">
-          <p className="font-bold text-orange-500">FoodieHub</p>
+          <div>
+            <p className="font-bold text-orange-500">FoodieHub</p>
+            <p className="mt-1 text-sm text-gray-500">
+              A community for food lovers and creators.
+            </p>
+          </div>
 
-          <p className="text-sm text-gray-500">
-            © 2026 FoodieHub. All rights reserved.
-          </p>
+          <div className="flex gap-5 text-sm text-gray-500">
+            <a href="#features" className="hover:text-orange-500">
+              Features
+            </a>
+
+            <a href="#how-it-works" className="hover:text-orange-500">
+              How It Works
+            </a>
+
+            <a href="/feeds/saved" className="hover:text-orange-500">
+              Saved
+            </a>
+
+            <a href="/feeds" className="hover:text-orange-500">
+              Feeds
+            </a>
+            <a href="/creatordashboard" className="hover:text-orange-500">
+              Creator Dashboard
+            </a>
+          </div>
+
+          <p className="text-sm text-gray-400">© 2026 FoodieHub</p>
         </div>
       </footer>
     </div>

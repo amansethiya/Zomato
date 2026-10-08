@@ -96,20 +96,25 @@ const Feed = () => {
   const handleSave = async (videoId) => {
     try {
       const response = await axios.post(
-        `http://localhost:3000/foodvideo/${videoId}/save`,
-        {},
+        `http://localhost:3000/foodvideo/save`,
+        {
+          foodId: videoId,
+        },
         {
           withCredentials: true,
         },
       );
 
-      setSavedVideos((previous) => {
-        if (response.data.saved) {
-          return [...new Set([...previous, videoId])];
-        }
-
-        return previous.filter((id) => id !== videoId);
-      });
+      setVideos((previousVideos) =>
+        previousVideos.map((item) =>
+          item._id === videoId
+            ? {
+                ...item,
+                saved: response.data.saved,
+              }
+            : item,
+        ),
+      );
     } catch (error) {
       console.error("Save error:", error);
 
@@ -288,8 +293,6 @@ const Feed = () => {
 
           <div className="space-y-8">
             {videos.map((item) => {
-              const isSaved = savedVideos.includes(item._id);
-
               return (
                 <article
                   key={item._id}
@@ -376,19 +379,19 @@ const Feed = () => {
                       {/* Save */}
                       <button
                         onClick={() => handleSave(item._id)}
-                        className={`ml-2 flex items-center gap-2 rounded-lg px-3 py-2 text-sm font-medium transition ${
-                          isSaved
-                            ? "bg-purple-50 text-purple-600"
-                            : "text-gray-600 hover:bg-gray-50 hover:text-purple-600"
+                        className={`cursor-pointer ml-2 flex items-center gap-2 rounded-lg px-3 py-2 text-sm font-medium transition ${
+                          item.saved
+                            ? " text-black-600"
+                            : "text-gray-600  hover:text-purple-600"
                         }`}
                       >
                         <Bookmark
                           size={19}
                           strokeWidth={2}
-                          fill={isSaved ? "currentColor" : "none"}
+                          fill={item.saved ? "#000" : "none"}
                         />
 
-                        <span>{isSaved ? "Saved" : "Save"}</span>
+                        <span>{item.saved ? "Saved" : "Save"}</span>
                       </button>
 
                       {/* Share */}

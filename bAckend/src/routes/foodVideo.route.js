@@ -10,6 +10,7 @@ import {
   likeController,
   saveController,
   myVideosController,
+  getSaveController,
 } from "../controller/foodVideo.controller.js";
 import multer from "multer";
 
@@ -33,6 +34,8 @@ router.get("/", authUserMiddleware, getFoodVideoController);
 router.post("/like", authUserMiddleware, likeController);
 
 router.post("/save", authUserMiddleware, saveController);
+
+router.get("/getsave", authUserMiddleware, getSaveController);
 
 router.get("/myVideos", authcreatorMiddleware, myVideosController);
 

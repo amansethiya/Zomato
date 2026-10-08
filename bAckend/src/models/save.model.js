@@ -12,6 +12,10 @@ const saveSchema = new mongoose.Schema(
       ref: "foodVideo",
       required: true,
     },
+    saved: {
+      type: Boolean,
+      default: true,
+    },
   },
   {
     timestamps: true,
