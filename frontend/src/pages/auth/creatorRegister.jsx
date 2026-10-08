@@ -5,6 +5,8 @@ import axios from "axios";
 
 const CreatorRegister = () => {
   const [showPassword, setShowPassword] = useState(false);
+  const [error, setError] = useState("");
+  const [loading, setLoading] = useState(false);
   const navigate = useNavigate();
 
   const [formData, setFormData] = useState({
@@ -14,6 +16,7 @@ const CreatorRegister = () => {
   });
 
   const handleChange = (e) => {
+    setError("");
     setFormData({
       ...formData,
       [e.target.name]: e.target.value,
@@ -22,6 +25,9 @@ const CreatorRegister = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+
+    setError("");
+    setLoading(true);
 
     try {
       await axios.post(
@@ -34,6 +40,12 @@ const CreatorRegister = () => {
       navigate("/creatorDashboard");
     } catch (err) {
       console.log(err);
+      setError(
+        err.response?.data?.message ||
+          "Unable to create creator account. username and email must be Unique!. Please try again.",
+      );
+    } finally {
+      setLoading(false);
     }
   };
 
@@ -112,6 +124,13 @@ const CreatorRegister = () => {
             </div>
 
             {/* Form */}
+
+            {error && (
+              <div className="mt-6 rounded-lg border border-red-200 bg-red-50 px-4 py-3 text-sm text-red-600">
+                {error}
+              </div>
+            )}
+
             <form onSubmit={handleSubmit} className="mt-8 space-y-5">
               {/* creatorusername */}
               <div>
@@ -206,9 +225,10 @@ const CreatorRegister = () => {
               {/* Submit */}
               <button
                 type="submit"
-                className="w-full rounded-xl bg-purple-600 py-3.5 font-semibold text-white transition hover:bg-purple-700 focus:outline-none focus:ring-4 focus:ring-purple-100"
+                disabled={loading}
+                className="w-full rounded-xl bg-purple-600 py-3.5 font-semibold text-white transition hover:bg-purple-700 focus:outline-none focus:ring-4 focus:ring-purple-100 disabled:cursor-not-allowed disabled:opacity-60"
               >
-                Create Creator Account
+                {loading ? "Creating Account..." : "Create Creator Account"}
               </button>
             </form>
 

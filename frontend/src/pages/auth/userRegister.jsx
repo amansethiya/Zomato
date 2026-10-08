@@ -9,6 +9,8 @@ const UserRegister = () => {
   const navigate = useNavigate();
 
   const [showPassword, setShowPassword] = useState(false);
+  const [error, setError] = useState("");
+  const [loading, setLoading] = useState(false);
 
   const [formData, setFormData] = useState({
     fullname: "",
@@ -16,19 +18,29 @@ const UserRegister = () => {
     password: "",
   });
   const handleChange = (e) => {
+    setError("");
     setFormData({ ...formData, [e.target.name]: e.target.value });
   };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
 
+    setError("");
+    setLoading(true);
+
     try {
       await axios.post("http://localhost:3000/auth/user/register", formData, {
         withCredentials: true,
       });
-      navigate("/");
+      navigate("/feeds");
     } catch (err) {
       console.log(err);
+      setError(
+        err.response?.data?.message ||
+          "Unable to create user account. Please try again. email must be Unique!",
+      );
+    } finally {
+      setLoading(false);
     }
   };
 
@@ -98,6 +110,13 @@ const UserRegister = () => {
             </div>
 
             {/* Form */}
+
+            {error && (
+              <div className="mt-6 rounded-lg border border-red-200 bg-red-50 px-4 py-3 text-sm text-red-600">
+                {error}
+              </div>
+            )}
+
             <form onSubmit={handleSubmit} className="mt-8 space-y-5">
               {/* Full Name */}
               <div>
@@ -175,9 +194,10 @@ const UserRegister = () => {
               {/* Submit */}
               <button
                 type="submit"
-                className="w-full rounded-xl bg-orange-500 py-3.5 font-semibold text-white transition hover:bg-orange-600 focus:outline-none focus:ring-4 focus:ring-orange-100"
+                disabled={loading}
+                className="w-full rounded-xl bg-purple-600 py-3.5 font-semibold text-white transition hover:bg-purple-700 focus:outline-none focus:ring-4 focus:ring-purple-100 disabled:cursor-not-allowed disabled:opacity-60"
               >
-                Create Account
+                {loading ? "Creating Account..." : "Create User Account"}
               </button>
             </form>
 
