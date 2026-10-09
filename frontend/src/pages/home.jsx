@@ -301,14 +301,6 @@ const Home = () => {
           </div>
 
           <div className="flex gap-5 text-sm text-gray-500">
-            <a href="#features" className="hover:text-orange-500">
-              Features
-            </a>
-
-            <a href="#how-it-works" className="hover:text-orange-500">
-              How It Works
-            </a>
-
             <a href="/feeds/saved" className="hover:text-orange-500">
               Saved
             </a>
