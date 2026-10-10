@@ -28,8 +28,9 @@ export async function registerController(req, res) {
   );
   res.cookie("token", token, {
     httpOnly: true,
-    secure: false,
-    sameSite: "lax",
+    secure: true,
+    sameSite: "none",
+    path: "/",
   });
   res.status(201).json({
     message: "user Registered Successfully",
@@ -62,8 +63,9 @@ export async function loginController(req, res) {
   );
   res.cookie("token", token, {
     httpOnly: true,
-    secure: false,
-    sameSite: "lax",
+    secure: true,
+    sameSite: "none",
+    path: "/",
   });
   res.status(201).json({
     message: "user Logged-In Successfully",
@@ -101,8 +103,9 @@ export async function registercreatorController(req, res) {
   const creatorToken = jwt.sign({ id: creator._id }, process.env.JWT_SECRET);
   res.cookie("creatorToken", creatorToken, {
     httpOnly: true,
-    secure: false,
-    sameSite: "lax",
+    secure: true,
+    sameSite: "none",
+    path: "/",
   });
   res.status(201).json({
     message: "Congretulation you are now creator",
@@ -133,8 +136,9 @@ export async function logincreatorController(req, res) {
   const creatorToken = jwt.sign({ id: creator._id }, process.env.JWT_SECRET);
   res.cookie("creatorToken", creatorToken, {
     httpOnly: true,
-    secure: false,
-    sameSite: "lax",
+    secure: true,
+    sameSite: "none",
+    path: "/",
   });
   res.status(201).json({
     message: "Congretulation you are now creator",
