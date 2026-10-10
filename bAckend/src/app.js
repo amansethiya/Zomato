@@ -10,7 +10,7 @@ app.use(express.json());
 app.use(cookieParser());
 app.use(
   cors({
-    origin: "http://localhost:5173",
+    origin: "https://foodie-hub-puce.vercel.app",
     credentials: true,
   }),
 );
@@ -18,5 +18,13 @@ app.use(
 app.use("/auth", authRouter);
 app.use("/foodvideo", foodVideoRouter);
 app.use("/creator", creatorRouter);
+
+app.get("/health", (req, res) => {
+  res.status(200).json({
+    success: true,
+    message:
+      "Thanks, FoodieHub's server is stared & in Running. Please go back to FoodieHub page",
+  });
+});
 
 export default app;

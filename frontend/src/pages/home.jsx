@@ -1,6 +1,7 @@
 import React from "react";
 import "../index.css";
 import { Link } from "react-router-dom";
+import ServerWakeupBanner from "../components/ServerWakeupBanner";
 import {
   ArrowRight,
   Play,
@@ -110,6 +111,8 @@ const Home = () => {
           </div>
         </div>
       </section>
+      {/* server alert  */}
+      <ServerWakeupBanner />
 
       {/* Features */}
       <section id="features" className="px-6 py-20">

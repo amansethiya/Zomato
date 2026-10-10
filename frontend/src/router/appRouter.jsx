@@ -9,7 +9,6 @@ import CreatorDashboard from "../pages/creatorDashboard";
 import Feeds from "../pages/feeds";
 import Profile from "../pages/profile";
 import Saved from "../pages/saved";
-// import ProtectedRoute from "../components/ProtectedRoute";
 
 const appRouter = () => {
   return (
