@@ -1,8 +1,8 @@
 import React, { useState } from "react";
 import "../../index.css";
 import { Link, useNavigate } from "react-router-dom";
-import axios from "axios";
 import { AlertCircle, RefreshCw, LogIn } from "lucide-react";
+import api from "../../api/axios";
 
 const CreatorLogin = () => {
   const navigate = useNavigate();
@@ -28,13 +28,9 @@ const CreatorLogin = () => {
 
     try {
       setError("");
-      const response = await axios.post(
-        "http://localhost:3000/auth/creator/login",
-        formData,
-        {
-          withCredentials: true,
-        },
-      );
+      const response = await api.post("/auth/creator/login", formData, {
+        withCredentials: true,
+      });
 
       navigate("/creatorDashboard");
     } catch (err) {

@@ -1,9 +1,9 @@
 import React, { useState } from "react";
 import "../../index.css";
 import { Link } from "react-router-dom";
-import axios from "axios";
 import { useNavigate } from "react-router-dom";
 import { AlertCircle, RefreshCw, LogIn } from "lucide-react";
+import api from "../../api/axios";
 
 const UserLogin = () => {
   const navigate = useNavigate();
@@ -29,13 +29,9 @@ const UserLogin = () => {
 
     try {
       setError("");
-      const response = await axios.post(
-        "http://localhost:3000/auth/user/login",
-        formData,
-        {
-          withCredentials: true,
-        },
-      );
+      const response = await api.post("/auth/user/login", formData, {
+        withCredentials: true,
+      });
       navigate("/");
     } catch (err) {
       console.log(err);

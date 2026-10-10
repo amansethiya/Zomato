@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
-import axios from "axios";
+import api from "../api/axios";
 
 import {
   Video,
@@ -41,12 +41,9 @@ const CreatorDashboard = () => {
     try {
       setError("");
 
-      const response = await axios.get(
-        "http://localhost:3000/foodvideo/myVideos",
-        {
-          withCredentials: true,
-        },
-      );
+      const response = await api.get("/foodvideo/myVideos", {
+        withCredentials: true,
+      });
 
       setRecentPosts(response.data.creatorVideos || []);
     } catch (error) {
@@ -118,7 +115,7 @@ const CreatorDashboard = () => {
       data.append("name", formData.name);
       data.append("description", formData.description);
 
-      await axios.post("http://localhost:3000/foodvideo/", data, {
+      await api.post("/foodvideo/", data, {
         withCredentials: true,
       });
 

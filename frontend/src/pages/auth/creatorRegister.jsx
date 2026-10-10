@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import "../../index.css";
 import { Link, useNavigate } from "react-router-dom";
-import axios from "axios";
+import api from "../../api/axios";
 
 const CreatorRegister = () => {
   const [showPassword, setShowPassword] = useState(false);
@@ -30,8 +30,8 @@ const CreatorRegister = () => {
     setLoading(true);
 
     try {
-      await axios.post(
-        "http://localhost:3000/auth/creator/register",
+      await api.post(
+        "/auth/creator/register",
         formData,
         {
           withCredentials: true,

@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import "../index.css";
-import axios from "axios";
+import api from "../api/axios";
 import { Link } from "react-router-dom";
 
 import {
@@ -33,7 +33,7 @@ const Feed = () => {
         setLoading(true);
         setError("");
 
-        const response = await axios.get("http://localhost:3000/foodvideo/", {
+        const response = await api.get("/foodvideo/", {
           withCredentials: true,
         });
 
@@ -59,8 +59,8 @@ const Feed = () => {
 
   const handleLike = async (videoId) => {
     try {
-      const response = await axios.post(
-        `http://localhost:3000/foodvideo/like`,
+      const response = await api.post(
+        `/foodvideo/like`,
         {
           foodId: videoId,
         },
@@ -95,8 +95,8 @@ const Feed = () => {
 
   const handleSave = async (videoId) => {
     try {
-      const response = await axios.post(
-        `http://localhost:3000/foodvideo/save`,
+      const response = await api.post(
+        `/foodvideo/save`,
         {
           foodId: videoId,
         },

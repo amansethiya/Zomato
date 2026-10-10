@@ -3,7 +3,7 @@ import "../index.css";
 
 import { Link, useParams, useNavigate } from "react-router-dom";
 import Navbar from "../components/navbar";
-import axios from "axios";
+import api from "../api/axios";
 
 import {
   ArrowLeft,
@@ -38,12 +38,9 @@ const CreatorProfile = () => {
         setError("");
 
         // Get creator profile
-        const profileResponse = await axios.get(
-          `http://localhost:3000/creator/${id}`,
-          {
-            withCredentials: true,
-          },
-        );
+        const profileResponse = await api.get(`/creator/${id}`, {
+          withCredentials: true,
+        });
 
         const creator = profileResponse.data.creator;
         const creatorVideos = creator.foodVideos || [];
@@ -58,12 +55,9 @@ const CreatorProfile = () => {
          * We use this information to show the correct
          * heart and bookmark state on this page.
          */
-        const feedResponse = await axios.get(
-          "http://localhost:3000/foodvideo/",
-          {
-            withCredentials: true,
-          },
-        );
+        const feedResponse = await api.get("/foodvideo/", {
+          withCredentials: true,
+        });
 
         const feedVideos = feedResponse.data.foodVideos || [];
 
@@ -109,8 +103,8 @@ const CreatorProfile = () => {
     try {
       setLikingId(videoId);
 
-      const response = await axios.post(
-        "http://localhost:3000/foodvideo/like",
+      const response = await api.post(
+        "/foodvideo/like",
         {
           foodId: videoId,
         },
@@ -151,8 +145,8 @@ const CreatorProfile = () => {
     try {
       setSavingId(videoId);
 
-      const response = await axios.post(
-        "http://localhost:3000/foodvideo/save",
+      const response = await api.post(
+        "/foodvideo/save",
         {
           foodId: videoId,
         },

@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import "../../index.css";
-import axios from "axios";
+import api from "../../api/axios";
 import { useNavigate } from "react-router-dom";
 
 import { Link } from "react-router-dom";
@@ -29,7 +29,7 @@ const UserRegister = () => {
     setLoading(true);
 
     try {
-      await axios.post("http://localhost:3000/auth/user/register", formData, {
+      await api.post("/auth/user/register", formData, {
         withCredentials: true,
       });
       navigate("/feeds");
