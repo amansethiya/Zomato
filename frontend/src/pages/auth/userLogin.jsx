@@ -32,10 +32,10 @@ const UserLogin = () => {
       const response = await api.post("/auth/user/login", formData, {
         withCredentials: true,
       });
-      navigate("/");
+      navigate("/feeds");
     } catch (err) {
       console.log(err);
-      setError(error.response?.data?.message || "Check eMail or Password.");
+      setError(err.response?.data?.message || "Check eMail or Password.");
     }
   };
 

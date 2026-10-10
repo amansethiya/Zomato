@@ -34,8 +34,13 @@ const CreatorLogin = () => {
 
       navigate("/creatorDashboard");
     } catch (err) {
-      console.log(err);
-      setError(error.response?.data?.message || "Check eMail or Password.");
+      console.error("Login error:", err.response?.data || err.message);
+
+      setError(
+        err.response?.data?.message ||
+          err.message ||
+          "Check eMail or Password.",
+      );
     }
   };
 
